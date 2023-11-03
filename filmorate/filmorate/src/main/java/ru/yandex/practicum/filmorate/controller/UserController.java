@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -21,21 +20,17 @@ public class UserController {
 
     @PostMapping
     public void addUser(@RequestBody User user) {
-        if(checkBody(user).equals("1")){
+        checkBody(user);
             user.setId(idGenerator.generateId());
             users.add(user);
-        }else {
-            checkBody(user);
-        }
+
     }
 
     @PutMapping("/{id}")
     public void updateUser(@PathVariable int id, @RequestBody User user) {
-        if(checkBody(user).equals("1")){
+        checkBody(user);
             users.set(id,user);
-        }else {
-            checkBody(user);
-        }
+
     }
 
     @GetMapping
@@ -50,7 +45,7 @@ public class UserController {
         }
     }
 
-    private String checkBody(@RequestBody User user) throws ValidationException {
+    private void checkBody(@RequestBody User user) throws ValidationException {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             throw new ValidationException("Некорректный адрес электронной почты");
         }else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
@@ -59,6 +54,6 @@ public class UserController {
             user.setName(user.getLogin());
         }else if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть в будущем");
-        }return "1";
+        }
     }
 }
