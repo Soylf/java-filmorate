@@ -20,21 +20,17 @@ public class FilmController {
 
     @PostMapping
     public void addFilm(@RequestBody Film film) throws ValidationException {
-        if(checkBody(film).equals("1")){
+            checkBody(film);
             film.setId(idGenerator.generateId());
             films.add(film);
-        }else {
-            checkBody(film);
-        }
+
     }
 
     @PutMapping("/{id}")
     public void updateFilm(@PathVariable int id, @RequestBody Film film) throws ValidationException {
-        if(checkBody(film).equals("1")){
-            films.set(id,film);
-        }else {
             checkBody(film);
-        }
+            films.set(id,film);
+
     }
 
     @GetMapping
@@ -49,7 +45,7 @@ public class FilmController {
         }
     }
 
-    private String checkBody(@RequestBody Film film) throws ValidationException {
+    private void checkBody(@RequestBody Film film) throws ValidationException {
         if (film.getName().isEmpty()) {
             throw new ValidationException("Название фильма не может быть пустым");
         }else if (film.getDescription().length() > 200) {
@@ -58,8 +54,6 @@ public class FilmController {
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         }else if (film.getDuration() <= 0) {
             throw new ValidationException("Продолжительность фильма должна быть положительной");
-        }else {
-            return "1";
         }
     }
 }
