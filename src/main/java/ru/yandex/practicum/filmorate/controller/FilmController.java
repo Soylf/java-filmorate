@@ -18,7 +18,7 @@ public class FilmController {
     IdGenerator idGenerator = new IdGenerator();
 
     @PostMapping
-    public Film addFilm(@RequestBody Film film) throws ValidationException {
+    public Film addFilm(@RequestBody Film film) {
         checkBody(film);
         film.setId(idGenerator.generateId());
         films.add(film);
@@ -26,7 +26,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@RequestBody Film film) throws ValidationException {
+    public Film updateFilm(@RequestBody Film film) {
         checkBody(film);
         Film film1 = films.get(film.getId());
         if (Objects.nonNull(film1)) {
@@ -35,7 +35,7 @@ public class FilmController {
             film1.setDescription(film.getDescription());
             film1.setReleaseDate(film.getReleaseDate());
 
-            films.add(film.getId()-1, film1);
+            films.add(film.getId() - 1, film1);
             return film1;
         }
         throw new ValidationException("Фильм не найден.");
