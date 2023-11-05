@@ -7,7 +7,7 @@ public class IdGenerator2 {
         this.currentValue = 0;
     }
 
-    public int generateId() {
+    public Integer generateId() {
         return currentValue++;
     }
 }

@@ -10,12 +10,14 @@ import java.time.LocalDate;
 @Setter
 @NonFinal
 public class User extends AbstractModel {
+
     private String email;
     private String login;
     private LocalDate birthday;
 
-    public User(Integer id, String email, String login, String name, LocalDate birthday) {
-        super(id, name);
+
+    public User(String email, String login, String name, LocalDate birthday) {
+        super(name);
         this.email = email;
         this.login = login;
         this.birthday = birthday;
