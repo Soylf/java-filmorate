@@ -27,6 +27,7 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
+        checkBody(film);
         Film film1 = films.get(film.getId());
         if (Objects.nonNull(film1)) {
             film1.setName(film.getName());
@@ -34,7 +35,7 @@ public class FilmController {
             film1.setDescription(film.getDescription());
             film1.setReleaseDate(film.getReleaseDate());
 
-            films.set(film.getId(), film1);
+            films.add(film.getId(), film1);
             return film1;
         }
         throw new ValidationException("Фильм не найден.");
