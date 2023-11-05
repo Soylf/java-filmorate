@@ -57,7 +57,7 @@ public class FilmController {
         }
     }
 
-    private static void checkBody(@RequestBody Film film) throws ValidationException {
+    private static void checkBody(Film film) throws ValidationException {
         if (film.getName().isEmpty()) {
             throw new ValidationException("Название фильма не может быть пустым");
         }

@@ -58,7 +58,7 @@ public class UserController {
         }
     }
 
-    private static void checkBody(@RequestBody User user) throws ValidationException {
+    private static void checkBody(User user) throws ValidationException {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             throw new ValidationException("Некорректный адрес электронной почты");
         }
