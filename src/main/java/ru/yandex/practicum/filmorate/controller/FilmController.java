@@ -28,7 +28,7 @@ public class FilmController {
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
         checkBody(film);
-        Film film1 = films.get(film.getId()-1);
+        Film film1 = films.get(film.getId() - 1);
         if (Objects.nonNull(film1)) {
             film1.setName(film.getName());
             film1.setDuration(film.getDuration());
