@@ -21,6 +21,7 @@ public class UserController {
     @PostMapping
     public void addUser(@RequestBody User user) {
         log.info("POST /user");
+        checkBody(user);
         user.setId(idGenerator.generateId());
         users.set(user.getId(), user);
     }
@@ -28,6 +29,7 @@ public class UserController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         log.info("PUT /user/" + id);
+        checkBody(user);
         User user1 = users.get(user.getId());
         if (Objects.nonNull(user1)) {
             user1.setName(user.getName());

@@ -20,8 +20,8 @@ public class FilmController {
     @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         log.debug("POST /film");
+        checkBody(film);
         film.setId(idGenerator.generateId());
-
         films.add(film);
         return film;
     }
@@ -29,7 +29,7 @@ public class FilmController {
     @PutMapping("/{id}")
     public Film updateFilm(@PathVariable int id, @RequestBody Film film) throws ValidationException {
         log.info("PUT /films/" + id);
-
+        checkBody(film);
         Film film1 = films.get(film.getId());
 
         if (Objects.nonNull(film1)) {
