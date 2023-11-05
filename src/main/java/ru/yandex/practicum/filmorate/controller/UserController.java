@@ -48,7 +48,7 @@ public class UserController {
     @GetMapping
     public List<User> getAllUsers() {
         log.info("GET /user");
-        return new ArrayList<>(users);
+        return users;
     }
 
 
