@@ -38,6 +38,7 @@ public class UserController {
             user1.setEmail(user.getEmail());
 
             log.debug("Данные пользователя успешно обновлены.");
+            users.set(user.getId(),user1);
             return user1;
         }
 

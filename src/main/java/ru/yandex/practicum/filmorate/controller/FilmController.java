@@ -38,6 +38,7 @@ public class FilmController {
             film1.setReleaseDate(film.getReleaseDate());
 
             log.debug("PUT /films/" + id);
+            films.set(film.getId(),film1);
             return film1;
         }
 
