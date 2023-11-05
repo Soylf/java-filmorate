@@ -28,7 +28,7 @@ public class UserController {
 
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         log.info("PUT /user/" + id);
         checkBody(user);
