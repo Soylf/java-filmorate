@@ -1,16 +1,23 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.NonFinal;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@Data
-public class User {
-    private Integer id;
+@Getter
+@Setter
+@NonFinal
+public class User extends AbstractModel {
     private String email;
-    private String name;
     private String login;
     private LocalDate birthday;
+
+    public User(Integer id, String email, String login, String name, LocalDate birthday) {
+        super(id, name);
+        this.email = email;
+        this.login = login;
+        this.birthday = birthday;
+    }
 }
