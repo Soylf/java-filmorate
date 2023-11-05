@@ -77,6 +77,6 @@ public class UserController {
         } else if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             log.error("Дата рождения не может быть в будущем");
         }
-        return false;
+        return true;
     }
 }
