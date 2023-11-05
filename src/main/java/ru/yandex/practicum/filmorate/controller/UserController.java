@@ -18,7 +18,7 @@ public class UserController {
     List<User> users = new ArrayList<>();
     IdGenerator2 idGenerator = new IdGenerator2();
 
-    @PostMapping
+    @PutMapping
     public User addUser(@RequestBody User user) {
         log.info("POST /user");
         checkBody(user);
@@ -28,7 +28,7 @@ public class UserController {
 
     }
 
-    @PutMapping
+    @PostMapping
     public User updateUser(@RequestBody User user) {
         log.info("PUT /user/" + user.getId());
         checkBody(user);

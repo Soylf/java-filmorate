@@ -17,7 +17,7 @@ public class FilmController {
     List<Film> films = new ArrayList<>();
     IdGenerator idGenerator = new IdGenerator();
 
-    @PostMapping
+    @PutMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         log.debug("POST /film");
         checkBody(film);
@@ -26,7 +26,7 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping
+    @PostMapping
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
         log.info("PUT /films/" + film.getId());
         checkBody(film);
