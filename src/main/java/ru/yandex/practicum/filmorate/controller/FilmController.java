@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Slf4j
 @RestController
-@RequestMapping("/film")
+@RequestMapping("/films")
 public class FilmController {
     List<Film> films = new ArrayList<>();
     IdGenerator idGenerator = new IdGenerator();
@@ -29,6 +29,8 @@ public class FilmController {
 
     @PutMapping("/{id}")
     public Film updateFilm(@PathVariable int id, @RequestBody Film film) throws ValidationException {
+        log.info("PUT /films/" + id);
+
         Film film1 = films.get(film.getId());
 
         if (Objects.nonNull(film1)) {
@@ -37,8 +39,7 @@ public class FilmController {
             film1.setDescription(film.getDescription());
             film1.setReleaseDate(film.getReleaseDate());
 
-            log.debug("PUT /films/" + id);
-            films.set(film.getId(),film1);
+            films.set(film.getId(), film1);
             return film1;
         }
 

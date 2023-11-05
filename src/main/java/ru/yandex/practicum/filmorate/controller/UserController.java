@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     List<User> users = new ArrayList<>();
     IdGenerator2 idGenerator = new IdGenerator2();
@@ -23,22 +23,22 @@ public class UserController {
         log.info("POST /user");
         checkBody(user);
         user.setId(idGenerator.generateId());
-        users.set(user.getId(),user);
+        users.set(user.getId(), user);
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
-        User user1 = users.get(user.getId());
         checkBody(user);
-
+        log.info("PUT /user/" + id);
+        User user1 = users.get(user.getId());
         if (Objects.nonNull(user1)) {
             user1.setName(user.getName());
             user1.setLogin(user.getLogin());
             user1.setBirthday(user.getBirthday());
             user1.setEmail(user.getEmail());
 
-            log.debug("Данные пользователя успешно обновлены.");
-            users.set(user.getId(),user1);
+
+            users.set(user.getId(), user1);
             return user1;
         }
 
