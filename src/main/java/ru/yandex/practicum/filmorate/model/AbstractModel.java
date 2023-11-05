@@ -9,7 +9,7 @@ import lombok.experimental.NonFinal;
 @Setter
 @NonFinal
 public class AbstractModel {
-    private Integer id;
+    private Integer id ;
     private String name;
 
     public AbstractModel(Integer id, String name) {
