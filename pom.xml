@@ -17,11 +17,7 @@
         <java.version>11</java.version>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>8.0.1.Final</version>
-        </dependency>
+        
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
