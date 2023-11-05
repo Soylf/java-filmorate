@@ -20,7 +20,6 @@ public class UserController {
 
     @PostMapping
     public User addUser(@RequestBody User user) {
-        log.info("POST /user");
         checkBody(user);
         user.setId(idGenerator.generateId());
         users.set(user.getId(), user);
@@ -30,7 +29,6 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
-        log.info("PUT /user/" + user.getId());
         checkBody(user);
         User user1 = users.get(user.getId());
         if (Objects.nonNull(user1)) {
@@ -47,7 +45,6 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        log.info("GET /user");
         return users;
     }
 

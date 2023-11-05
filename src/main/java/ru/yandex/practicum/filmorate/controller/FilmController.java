@@ -19,7 +19,6 @@ public class FilmController {
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
-        log.debug("POST /film");
         checkBody(film);
         film.setId(idGenerator.generateId());
         films.add(film);
@@ -28,7 +27,6 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
-        log.info("PUT /films/" + film.getId());
         checkBody(film);
         Film film1 = films.get(film.getId());
         if (Objects.nonNull(film1)) {
@@ -46,7 +44,6 @@ public class FilmController {
 
     @GetMapping
     public List<Film> getAllFilms() {
-        log.debug("GET /film");
         return films;
     }
 
