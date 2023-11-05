@@ -37,7 +37,7 @@ public class UserController {
             user1.setBirthday(user.getBirthday());
             user1.setEmail(user.getEmail());
 
-            users.add(user.getId(), user1);
+            users.add(user.getId()-1, user1);
             return user1;
         }
         throw new ValidationException("Пользователь не найден.");

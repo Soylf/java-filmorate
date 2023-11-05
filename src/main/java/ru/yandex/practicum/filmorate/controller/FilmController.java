@@ -35,7 +35,7 @@ public class FilmController {
             film1.setDescription(film.getDescription());
             film1.setReleaseDate(film.getReleaseDate());
 
-            films.add(film.getId(), film1);
+            films.add(film.getId()-1, film1);
             return film1;
         }
         throw new ValidationException("Фильм не найден.");
