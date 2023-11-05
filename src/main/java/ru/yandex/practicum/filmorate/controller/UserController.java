@@ -21,11 +21,11 @@ public class UserController {
     @PostMapping
     public User addUser(@RequestBody User user) {
         log.info("POST /user");
-        if(!checkBody(user)){
+        if (!checkBody(user)) {
             user.setId(idGenerator.generateId());
             users.set(user.getId(), user);
             return user;
-        }else {
+        } else {
             throw new ValidationException("Бонг, чёт не так???");
         }
 
@@ -34,7 +34,7 @@ public class UserController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         log.info("PUT /user/" + id);
-        if(!checkBody(user)){
+        if (!checkBody(user)) {
             User user1 = users.get(user.getId());
             if (Objects.nonNull(user1)) {
                 user1.setName(user.getName());

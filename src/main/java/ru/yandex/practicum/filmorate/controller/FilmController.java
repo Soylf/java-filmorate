@@ -20,11 +20,11 @@ public class FilmController {
     @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         log.debug("POST /film");
-        if(!checkBody(film)){
+        if (!checkBody(film)) {
             film.setId(idGenerator.generateId());
             films.add(film);
             return film;
-        }else {
+        } else {
             throw new ValidationException("Бонг, чёт не так???");
         }
 
@@ -34,7 +34,7 @@ public class FilmController {
     public Film updateFilm(@PathVariable int id, @RequestBody Film film) throws ValidationException {
         log.info("PUT /films/" + id);
         checkBody(film);
-        if(!checkBody(film)){
+        if (!checkBody(film)) {
             Film film1 = films.get(film.getId());
             if (Objects.nonNull(film1)) {
                 film1.setName(film.getName());
@@ -44,9 +44,9 @@ public class FilmController {
 
                 films.set(film.getId(), film1);
                 return film1;
-        }
+            }
             throw new ValidationException("Фильм не найден.");
-        }else {
+        } else {
             throw new ValidationException("Бонг, чёт не так???");
         }
     }
