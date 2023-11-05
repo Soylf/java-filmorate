@@ -17,7 +17,7 @@ public class Film extends AbstractModel {
     private Integer duration;
 
     public Film(String name, String description, LocalDate releaseDate, Integer duration) {
-        super( name);
+        super(name);
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
