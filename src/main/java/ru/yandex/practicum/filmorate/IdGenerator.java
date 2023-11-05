@@ -4,7 +4,7 @@ public class IdGenerator {
     private Integer currentValue;
 
     public IdGenerator() {
-        this.currentValue = 0;
+        this.currentValue = 1;
     }
 
     public int generateId() {

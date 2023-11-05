@@ -47,7 +47,7 @@ public class FilmController {
     @GetMapping
     public List<Film> getAllFilms() {
         log.debug("GET /film");
-        return new ArrayList<>(films);
+        return films;
     }
 
 
