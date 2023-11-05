@@ -30,14 +30,14 @@ public class UserController {
     @PutMapping
     public User updateUser(@RequestBody User user) {
         checkBody(user);
-        User user1 = users.get(user.getId());
+        User user1 = users.get(user.getId()-1);
         if (Objects.nonNull(user1)) {
             user1.setName(user.getName());
             user1.setLogin(user.getLogin());
             user1.setBirthday(user.getBirthday());
             user1.setEmail(user.getEmail());
 
-            users.add(user.getId() - 1, user1);
+            users.set(user.getId() - 1, user1);
             return user1;
         }
         throw new ValidationException("Пользователь не найден.");

@@ -28,14 +28,14 @@ public class FilmController {
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
         checkBody(film);
-        Film film1 = films.get(film.getId());
+        Film film1 = films.get(film.getId()-1);
         if (Objects.nonNull(film1)) {
             film1.setName(film.getName());
             film1.setDuration(film.getDuration());
             film1.setDescription(film.getDescription());
             film1.setReleaseDate(film.getReleaseDate());
 
-            films.add(film.getId() - 1, film1);
+            films.set(film.getId() - 1, film1);
             return film1;
         }
         throw new ValidationException("Фильм не найден.");
