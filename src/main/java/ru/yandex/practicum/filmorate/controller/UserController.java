@@ -29,7 +29,7 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
-        checkBody(user);
+        
         User user1 = users.get(user.getId());
         if (Objects.nonNull(user1)) {
             user1.setName(user.getName());
