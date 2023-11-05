@@ -12,7 +12,8 @@ public class AbstractModel {
     private Integer id;
     private String name;
 
-    public AbstractModel(String name) {
+    public AbstractModel(Integer id, String name) {
         this.name = name;
+        this.id = id;
     }
 }

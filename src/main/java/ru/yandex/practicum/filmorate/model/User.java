@@ -16,8 +16,8 @@ public class User extends AbstractModel {
     private LocalDate birthday;
 
 
-    public User(String email, String login, String name, LocalDate birthday) {
-        super(name);
+    public User(Integer id, String email, String login, String name, LocalDate birthday) {
+        super(id, name);
         this.email = email;
         this.login = login;
         this.birthday = birthday;
