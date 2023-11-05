@@ -20,7 +20,7 @@ public class FilmController {
     @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         log.debug("POST /film");
-        if (!checkBody(film)) {
+        if (checkBody(film)) {
             film.setId(idGenerator.generateId());
             films.add(film);
             return film;
@@ -34,7 +34,7 @@ public class FilmController {
     public Film updateFilm(@PathVariable int id, @RequestBody Film film) throws ValidationException {
         log.info("PUT /films/" + id);
         checkBody(film);
-        if (!checkBody(film)) {
+        if (checkBody(film)) {
             Film film1 = films.get(film.getId());
             if (Objects.nonNull(film1)) {
                 film1.setName(film.getName());
@@ -74,6 +74,8 @@ public class FilmController {
             log.error("Дата релиза не может быть раньше 28 декабря 1895 года");
         } else if (film.getDuration() <= 0) {
             log.error("Продолжительность фильма должна быть положительной");
+        } else if (film != films.get(film.getId())) {
+            log.error("Такого фильма нету");
         }
         return true;
     }

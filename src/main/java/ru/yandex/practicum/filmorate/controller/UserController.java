@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping
     public User addUser(@RequestBody User user) {
         log.info("POST /user");
-        if (!checkBody(user)) {
+        if (checkBody(user)) {
             user.setId(idGenerator.generateId());
             users.set(user.getId(), user);
             return user;
@@ -34,7 +34,7 @@ public class UserController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         log.info("PUT /user/" + id);
-        if (!checkBody(user)) {
+        if (checkBody(user)) {
             User user1 = users.get(user.getId());
             if (Objects.nonNull(user1)) {
                 user1.setName(user.getName());
@@ -76,6 +76,8 @@ public class UserController {
             user.setName(user.getLogin());
         } else if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             log.error("Дата рождения не может быть в будущем");
+        } else if (user != users.get(user.getId())) {
+            log.error("Такого пользователя нету");
         }
         return true;
     }
