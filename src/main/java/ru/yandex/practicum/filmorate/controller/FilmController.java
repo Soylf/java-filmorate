@@ -21,7 +21,6 @@ public class FilmController {
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         log.debug("POST /film");
         film.setId(idGenerator.generateId());
-        checkBody(film);
 
         films.add(film);
         return film;

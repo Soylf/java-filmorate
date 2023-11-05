@@ -21,14 +21,12 @@ public class UserController {
     @PostMapping
     public void addUser(@RequestBody User user) {
         log.info("POST /user");
-        checkBody(user);
         user.setId(idGenerator.generateId());
         users.set(user.getId(), user);
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
-        checkBody(user);
         log.info("PUT /user/" + id);
         User user1 = users.get(user.getId());
         if (Objects.nonNull(user1)) {
