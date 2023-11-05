@@ -27,7 +27,6 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) throws ValidationException {
-        checkBody(film);
         Film film1 = films.get(film.getId());
         if (Objects.nonNull(film1)) {
             film1.setName(film.getName());
