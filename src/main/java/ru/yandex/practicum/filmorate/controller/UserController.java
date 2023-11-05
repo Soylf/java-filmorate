@@ -32,7 +32,7 @@ public class UserController {
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         log.info("PUT /user/" + id);
         checkBody(user);
-        User user1 = users.get(user.getId());
+        User user1 = users.get(id);
         if (Objects.nonNull(user1)) {
             user1.setName(user.getName());
             user1.setLogin(user.getLogin());
