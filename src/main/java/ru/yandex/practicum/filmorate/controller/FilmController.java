@@ -20,29 +20,35 @@ public class FilmController {
     @PostMapping
     public Film addFilm(@RequestBody Film film) throws ValidationException {
         log.debug("POST /film");
-        checkBody(film);
-        film.setId(idGenerator.generateId());
-        films.add(film);
-        return film;
+        if(!checkBody(film)){
+            film.setId(idGenerator.generateId());
+            films.add(film);
+            return film;
+        }else {
+            throw new ValidationException("Бонг, чёт не так???");
+        }
+
     }
 
     @PutMapping("/{id}")
     public Film updateFilm(@PathVariable int id, @RequestBody Film film) throws ValidationException {
         log.info("PUT /films/" + id);
         checkBody(film);
-        Film film1 = films.get(film.getId());
+        if(!checkBody(film)){
+            Film film1 = films.get(film.getId());
+            if (Objects.nonNull(film1)) {
+                film1.setName(film.getName());
+                film1.setDuration(film.getDuration());
+                film1.setDescription(film.getDescription());
+                film1.setReleaseDate(film.getReleaseDate());
 
-        if (Objects.nonNull(film1)) {
-            film1.setName(film.getName());
-            film1.setDuration(film.getDuration());
-            film1.setDescription(film.getDescription());
-            film1.setReleaseDate(film.getReleaseDate());
-
-            films.set(film.getId(), film1);
-            return film1;
+                films.set(film.getId(), film1);
+                return film1;
         }
-
-        throw new ValidationException("Фильм не найден.");
+            throw new ValidationException("Фильм не найден.");
+        }else {
+            throw new ValidationException("Бонг, чёт не так???");
+        }
     }
 
 
@@ -59,19 +65,16 @@ public class FilmController {
         }
     }
 
-    private void checkBody(@RequestBody Film film) throws ValidationException {
+    private boolean checkBody(@RequestBody Film film) throws ValidationException {
         if (film.getName().isEmpty()) {
             log.error("Название фильма не может быть пустым");
-            throw new ValidationException("Название фильма не может быть пустым");
         } else if (film.getDescription().length() > 200) {
             log.error("Описание фильма не может превышать 200 символов");
-            throw new ValidationException("Описание фильма не может превышать 200 символов");
         } else if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             log.error("Дата релиза не может быть раньше 28 декабря 1895 года");
-            throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
         } else if (film.getDuration() <= 0) {
             log.error("Продолжительность фильма должна быть положительной");
-            throw new ValidationException("Продолжительность фильма должна быть положительной");
         }
+        return true;
     }
 }

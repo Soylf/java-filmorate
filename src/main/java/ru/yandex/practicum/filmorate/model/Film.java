@@ -9,8 +9,6 @@ import java.time.LocalDate;
 
 @AllArgsConstructor
 @Data
-@NonFinal
-@NotBlank
 public class Film {
     private Integer id;
     private String name;

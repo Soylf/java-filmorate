@@ -19,30 +19,39 @@ public class UserController {
     IdGenerator2 idGenerator = new IdGenerator2();
 
     @PostMapping
-    public void addUser(@RequestBody User user) {
+    public User addUser(@RequestBody User user) {
         log.info("POST /user");
-        checkBody(user);
-        user.setId(idGenerator.generateId());
-        users.set(user.getId(), user);
+        if(!checkBody(user)){
+            user.setId(idGenerator.generateId());
+            users.set(user.getId(), user);
+            return user;
+        }else {
+            throw new ValidationException("Бонг, чёт не так???");
+        }
+
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User user) {
         log.info("PUT /user/" + id);
-        checkBody(user);
-        User user1 = users.get(user.getId());
-        if (Objects.nonNull(user1)) {
-            user1.setName(user.getName());
-            user1.setLogin(user.getLogin());
-            user1.setBirthday(user.getBirthday());
-            user1.setEmail(user.getEmail());
+        if(!checkBody(user)){
+            User user1 = users.get(user.getId());
+            if (Objects.nonNull(user1)) {
+                user1.setName(user.getName());
+                user1.setLogin(user.getLogin());
+                user1.setBirthday(user.getBirthday());
+                user1.setEmail(user.getEmail());
 
 
-            users.set(user.getId(), user1);
-            return user1;
+                users.set(user.getId(), user1);
+                return user1;
+            }
+
+            throw new ValidationException("Пользователь не найден.");
+        } else {
+            throw new ValidationException("Бонг, чёт не так???");
         }
 
-        throw new ValidationException("Пользователь не найден.");
     }
 
     @GetMapping
@@ -58,18 +67,16 @@ public class UserController {
         }
     }
 
-    private void checkBody(@RequestBody User user) throws ValidationException {
+    private boolean checkBody(@RequestBody User user) throws ValidationException {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             log.error("Некорректный адрес электронной почты");
-            throw new ValidationException("Некорректный адрес электронной почты");
         } else if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
             log.error("Некорректный логин");
-            throw new ValidationException("Некорректный логин");
         } else if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         } else if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             log.error("Дата рождения не может быть в будущем");
-            throw new ValidationException("Дата рождения не может быть в будущем");
         }
+        return false;
     }
 }

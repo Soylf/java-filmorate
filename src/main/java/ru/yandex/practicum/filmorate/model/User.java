@@ -9,8 +9,6 @@ import java.time.LocalDate;
 
 @AllArgsConstructor
 @Data
-@NonFinal
-@NotBlank
 public class User {
     private Integer id;
     private String email;
