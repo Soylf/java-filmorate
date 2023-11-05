@@ -29,10 +29,10 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@PathVariable int id, @RequestBody User user) {
-        log.info("PUT /user/" + id);
+    public User updateUser(@RequestBody User user) {
+        log.info("PUT /user/" + user.getId());
         checkBody(user);
-        User user1 = users.get(id);
+        User user1 = users.get(user.getId());
         if (Objects.nonNull(user1)) {
             user1.setName(user.getName());
             user1.setLogin(user.getLogin());
