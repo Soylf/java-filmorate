@@ -26,11 +26,11 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public Film updateFilm(@PathVariable int id, @RequestBody Film film) throws ValidationException {
         log.info("PUT /films/" + id);
         checkBody(film);
-        Film film1 = films.get(film.getId());
+        Film film1 = films.get(id);
         if (Objects.nonNull(film1)) {
             film1.setName(film.getName());
             film1.setDuration(film.getDuration());
