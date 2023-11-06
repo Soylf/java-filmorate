@@ -49,7 +49,7 @@ public class FilmController {
 
 
     private static void checkBody(Film film) throws ValidationException {
-        if (film.getName().isEmpty() || film.getName().contains(" ")) {
+        if (film.getName().isEmpty()) {
             throw new ValidationException("Название фильма не может быть пустым");
         }
         if (film.getDescription().length() > 200) {
