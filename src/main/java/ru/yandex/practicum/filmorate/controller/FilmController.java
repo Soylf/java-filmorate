@@ -6,36 +6,34 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    List<Film> films = new ArrayList<>();
+    Map<Integer,Film> films = new HashMap<>();
     IdGenerator idGenerator = new IdGenerator();
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) {
         checkBody(film);
         film.setId(idGenerator.generateId());
-        films.add(film);
+        films.put(film.getId(), film);
         return film;
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
         checkBody(film);
-        Film film1 = films.get(film.getId() - 1);
+        Film film1 = films.get(film.getId());
         if (Objects.nonNull(film1)) {
             film1.setName(film.getName());
             film1.setDuration(film.getDuration());
             film1.setDescription(film.getDescription());
             film1.setReleaseDate(film.getReleaseDate());
 
-            films.set(film.getId() - 1, film1);
+            films.put(film.getId(), film1);
             return film1;
         }
         throw new ValidationException("Фильм не найден.");
@@ -44,7 +42,7 @@ public class FilmController {
 
     @GetMapping
     public List<Film> getAllFilms() {
-        return films;
+        return new ArrayList<>(films.values());
     }
 
 

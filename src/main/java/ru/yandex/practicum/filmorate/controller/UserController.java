@@ -7,22 +7,20 @@ import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    List<User> users = new ArrayList<>();
+    Map<Integer,User> users = new HashMap<>();
     IdGenerator2 idGenerator = new IdGenerator2();
 
     @PostMapping
     public User addUser(@RequestBody User user) {
         checkBody(user);
         user.setId(idGenerator.generateId());
-        users.add(user);
+        users.put(user.getId(),user);
         return user;
 
     }
@@ -30,14 +28,14 @@ public class UserController {
     @PutMapping
     public User updateUser(@RequestBody User user) {
         checkBody(user);
-        User user1 = users.get(user.getId() - 1);
+        User user1 = users.get(user.getId());
         if (Objects.nonNull(user1)) {
             user1.setName(user.getName());
             user1.setLogin(user.getLogin());
             user1.setBirthday(user.getBirthday());
             user1.setEmail(user.getEmail());
 
-            users.set(user.getId() - 1, user1);
+            users.put(user.getId(), user1);
             return user1;
         }
         throw new ValidationException("Пользователь не найден.");
@@ -45,7 +43,7 @@ public class UserController {
 
     @GetMapping
     public List<User> getAllUsers() {
-        return users;
+        return new ArrayList<>(users.values());
     }
 
 
