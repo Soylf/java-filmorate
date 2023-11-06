@@ -66,6 +66,6 @@ public class FilmController {
 
 
     private Integer generateId() {
-        return idGenerator++;
+        return ++idGenerator;
     }
 }
