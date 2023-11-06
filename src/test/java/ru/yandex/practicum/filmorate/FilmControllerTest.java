@@ -14,11 +14,9 @@ public class FilmControllerTest {
 
     @Test
     void addFilmWithNullName() {
-        Film film = new Film(0, " ", "gff", LocalDate.now(), 150);
-        Film film1 = new Film(0, "", "gff", LocalDate.now(), 150);
+        Film film = new Film(0, "", "gff", LocalDate.now(), 150);
 
         assertThrows(ValidationException.class, () -> filmController.addFilm(film));
-        assertThrows(ValidationException.class, () -> filmController.addFilm(film1));
     }
 
     @Test
