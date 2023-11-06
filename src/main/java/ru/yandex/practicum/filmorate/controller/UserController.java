@@ -22,7 +22,6 @@ public class UserController {
         user.setId(generateId());
         users.put(user.getId(), user);
         return user;
-
     }
 
     @PutMapping
@@ -64,6 +63,6 @@ public class UserController {
     }
 
     private Integer generateId() {
-        return ++idGenerator;
+        return idGenerator++;
     }
 }
