@@ -12,7 +12,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    Map<Integer,Film> films = new HashMap<>();
+    Map<Integer, Film> films = new HashMap<>();
     IdGenerator idGenerator = new IdGenerator();
 
     @PostMapping

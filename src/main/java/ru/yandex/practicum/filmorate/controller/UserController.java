@@ -13,14 +13,14 @@ import java.util.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    Map<Integer,User> users = new HashMap<>();
+    Map<Integer, User> users = new HashMap<>();
     IdGenerator2 idGenerator = new IdGenerator2();
 
     @PostMapping
     public User addUser(@RequestBody User user) {
         checkBody(user);
         user.setId(idGenerator.generateId());
-        users.put(user.getId(),user);
+        users.put(user.getId(), user);
         return user;
 
     }
