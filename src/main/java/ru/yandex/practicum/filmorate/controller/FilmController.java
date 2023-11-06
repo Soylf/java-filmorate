@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import ru.yandex.practicum.filmorate.IdGenerator;
 import ru.yandex.practicum.filmorate.model.Film;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.Ui.ValidationException;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -13,12 +13,13 @@ import java.util.*;
 @RequestMapping("/films")
 public class FilmController {
     Map<Integer, Film> films = new HashMap<>();
-    IdGenerator idGenerator = new IdGenerator();
+    private int idGenerator = 0;
+
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) {
         checkBody(film);
-        film.setId(idGenerator.generateId());
+        film.setId(generateId());
         films.put(film.getId(), film);
         return film;
     }
@@ -26,15 +27,16 @@ public class FilmController {
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
         checkBody(film);
-        Film film1 = films.get(film.getId());
-        if (Objects.nonNull(film1)) {
-            film1.setName(film.getName());
-            film1.setDuration(film.getDuration());
-            film1.setDescription(film.getDescription());
-            film1.setReleaseDate(film.getReleaseDate());
 
-            films.put(film.getId(), film1);
-            return film1;
+        Film filmCurl = films.get(film.getId());
+        if (Objects.nonNull(filmCurl)) {
+            filmCurl.setName(film.getName());
+            filmCurl.setDuration(film.getDuration());
+            filmCurl.setDescription(film.getDescription());
+            filmCurl.setReleaseDate(film.getReleaseDate());
+
+            films.put(film.getId(), filmCurl);
+            return filmCurl;
         }
         throw new ValidationException("Фильм не найден.");
     }
@@ -46,14 +48,8 @@ public class FilmController {
     }
 
 
-    private static class ValidationException extends RuntimeException {
-        public ValidationException(String message) {
-            super(message);
-        }
-    }
-
     private static void checkBody(Film film) throws ValidationException {
-        if (film.getName().isEmpty()) {
+        if (film.getName().isEmpty() || film.getName().contains(" ")) {
             throw new ValidationException("Название фильма не может быть пустым");
         }
         if (film.getDescription().length() > 200) {
@@ -66,5 +62,10 @@ public class FilmController {
             throw new ValidationException("Продолжительность фильма должна быть положительной");
         }
 
+    }
+
+
+    private Integer generateId() {
+        return ++idGenerator;
     }
 }
