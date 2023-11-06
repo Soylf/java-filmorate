@@ -13,7 +13,7 @@ import java.util.*;
 @RequestMapping("/films")
 public class FilmController {
     Map<Integer, Film> films = new HashMap<>();
-    private int idGenerator = 0;
+    private Integer idGenerator = 0;
 
 
     @PostMapping
