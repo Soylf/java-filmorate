@@ -2,9 +2,9 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 
-import ru.yandex.practicum.filmorate.IdGenerator2;
 import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.Ui.ValidationException;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -14,29 +14,29 @@ import java.util.*;
 @RequestMapping("/users")
 public class UserController {
     Map<Integer, User> users = new HashMap<>();
-    IdGenerator2 idGenerator = new IdGenerator2();
+    private Integer idGenerator = 0;
 
     @PostMapping
     public User addUser(@RequestBody User user) {
         checkBody(user);
-        user.setId(idGenerator.generateId());
+        user.setId(generateId());
         users.put(user.getId(), user);
         return user;
-
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
         checkBody(user);
-        User user1 = users.get(user.getId());
-        if (Objects.nonNull(user1)) {
-            user1.setName(user.getName());
-            user1.setLogin(user.getLogin());
-            user1.setBirthday(user.getBirthday());
-            user1.setEmail(user.getEmail());
 
-            users.put(user.getId(), user1);
-            return user1;
+        User userCurl = users.get(user.getId());
+        if (Objects.nonNull(userCurl)) {
+            userCurl.setName(user.getName());
+            userCurl.setLogin(user.getLogin());
+            userCurl.setBirthday(user.getBirthday());
+            userCurl.setEmail(user.getEmail());
+
+            users.put(user.getId(), userCurl);
+            return userCurl;
         }
         throw new ValidationException("Пользователь не найден.");
     }
@@ -46,12 +46,6 @@ public class UserController {
         return new ArrayList<>(users.values());
     }
 
-
-    private static class ValidationException extends RuntimeException {
-        public ValidationException(String message) {
-            super(message);
-        }
-    }
 
     private static void checkBody(User user) throws ValidationException {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
@@ -66,5 +60,9 @@ public class UserController {
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Дата рождения не может быть в будущем");
         }
+    }
+
+    private Integer generateId() {
+        return ++idGenerator;
     }
 }
