@@ -1,10 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
+
 import lombok.extern.slf4j.Slf4j;
 
 import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.Ui.ValidationException;
+import storage.user.InMemoryUserStorage;
+import storage.user.service.UserService;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -13,39 +16,52 @@ import java.util.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    Map<Integer, User> users = new HashMap<>();
-    private Integer idGenerator = 0;
+    UserService userService = new UserService();
+    InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
 
     @PostMapping
     public User addUser(@RequestBody User user) {
         checkBody(user);
-        user.setId(generateId());
-        users.put(user.getId(), user);
-        return user;
+        return inMemoryUserStorage.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
         checkBody(user);
-
-        User userCurl = users.get(user.getId());
-        if (Objects.nonNull(userCurl)) {
-            userCurl.setName(user.getName());
-            userCurl.setLogin(user.getLogin());
-            userCurl.setBirthday(user.getBirthday());
-            userCurl.setEmail(user.getEmail());
-
-            users.put(user.getId(), userCurl);
-            return userCurl;
-        }
-        throw new ValidationException("Пользователь не найден.");
+        return inMemoryUserStorage.updateUser(user);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+        return inMemoryUserStorage.getAllUsers();
     }
 
+    @DeleteMapping
+    public User deleteUser(User user) {
+        return inMemoryUserStorage.deleteUser(user.getId());
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@RequestHeader Integer id, Integer userId) {
+        userService.addFriend(id, userId);
+        return inMemoryUserStorage.getUserId(id);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteUser(@RequestHeader Integer id, Integer friendId) {
+        userService.deleteFriend(id, friendId);
+        return inMemoryUserStorage.getUserId(id);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> listFriends(@RequestHeader Integer userId) {
+        return userService.friends(userId);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> mutualFriends(@RequestHeader Integer id, Integer otherId) {
+        return userService.mutualFriends(id, otherId);
+    }
 
     private static void checkBody(User user) throws ValidationException {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
@@ -62,7 +78,4 @@ public class UserController {
         }
     }
 
-    private Integer generateId() {
-        return ++idGenerator;
-    }
 }

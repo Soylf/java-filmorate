@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import ru.yandex.practicum.filmorate.Ui.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.Ui.ValidationException;
+import storage.film.InMemoryFilmStorage;
+import storage.film.service.FilmService;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -12,41 +14,50 @@ import java.util.*;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    Map<Integer, Film> films = new HashMap<>();
-    private Integer idGenerator = 0;
+    InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
+    FilmService filmService = new FilmService();
 
 
     @PostMapping
     public Film addFilm(@RequestBody Film film) {
         checkBody(film);
-        film.setId(generateId());
-        films.put(film.getId(), film);
-        return film;
+        return inMemoryFilmStorage.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
         checkBody(film);
-
-        Film filmCurl = films.get(film.getId());
-        if (Objects.nonNull(filmCurl)) {
-            filmCurl.setName(film.getName());
-            filmCurl.setDuration(film.getDuration());
-            filmCurl.setDescription(film.getDescription());
-            filmCurl.setReleaseDate(film.getReleaseDate());
-
-            films.put(film.getId(), filmCurl);
-            return filmCurl;
-        }
-        throw new ValidationException("Фильм не найден.");
+        return inMemoryFilmStorage.updateFilm(film);
     }
 
+    @DeleteMapping
+    public Film deleteFilm(Integer id) {
+        inMemoryFilmStorage.deleteFilm(id);
+        return inMemoryFilmStorage.getFilm(id);
+    }
 
     @GetMapping
     public List<Film> getAllFilms() {
-        return new ArrayList<>(films.values());
+        return inMemoryFilmStorage.getAllFilms();
     }
 
+    @PutMapping("/{id}/like/{userId}")
+    public Film addLike(@RequestHeader int id, int userId) {
+        filmService.addLike(id, userId);
+        return inMemoryFilmStorage.getFilm(id);
+    }
+
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(@RequestHeader int id, int userId) {
+        filmService.deleteLike(id, userId);
+        return inMemoryFilmStorage.getFilm(id);
+    }
+
+    @GetMapping("/popular?count={count}")
+    public List<Film> popularFilms(@RequestHeader int count) {
+        return filmService.popularFilm(count);
+    }
 
     private static void checkBody(Film film) throws ValidationException {
         if (film.getName().isEmpty()) {
@@ -62,10 +73,5 @@ public class FilmController {
             throw new ValidationException("Продолжительность фильма должна быть положительной");
         }
 
-    }
-
-
-    private Integer generateId() {
-        return ++idGenerator;
     }
 }
