@@ -1,81 +1,74 @@
 package ru.yandex.practicum.filmorate.controller;
 
-
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.Ui.ValidationException;
-import storage.user.InMemoryUserStorage;
-import storage.user.service.UserService;
 
-import java.time.LocalDate;
+
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.storage.user.service.UserService;
+
 import java.util.*;
+
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    UserService userService = new UserService();
-    InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
+    private final UserService userService;
+    private final UserStorage userStorage;
 
     @PostMapping
     public User addUser(@RequestBody User user) {
-        checkBody(user);
-        return inMemoryUserStorage.addUser(user);
+        log.info("addUser_запушен");
+        return userStorage.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
-        checkBody(user);
-        return inMemoryUserStorage.updateUser(user);
+        return userStorage.updateUser(user);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        return inMemoryUserStorage.getAllUsers();
+        return userStorage.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable(value = "id") Integer id) {
+        return userStorage.getUserId(id);
     }
 
     @DeleteMapping
     public User deleteUser(User user) {
-        return inMemoryUserStorage.deleteUser(user.getId());
+        return userStorage.deleteUser(user.getId());
     }
 
+
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@RequestHeader Integer id, Integer userId) {
-        userService.addFriend(id, userId);
-        return inMemoryUserStorage.getUserId(id);
+    public User addFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "friendId") Integer userId) {
+        log.info("запущен_addFriend");
+        return userService.addFriend(id, userId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User deleteUser(@RequestHeader Integer id, Integer friendId) {
-        userService.deleteFriend(id, friendId);
-        return inMemoryUserStorage.getUserId(id);
+    public boolean deleteFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "id") Integer friendId) {
+        log.info("запущен_deleteFriend");
+        return userService.deleteFriend(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
-    public List<User> listFriends(@RequestHeader Integer userId) {
-        return userService.friends(userId);
+    public List<User> listFriends(@PathVariable(value = "id") Integer userId) {
+        log.info("запущен_ListFriend");
+        return userService.getFriends(userId);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> mutualFriends(@RequestHeader Integer id, Integer otherId) {
+    public List<User> mutualFriends(@PathVariable(value = "id") Integer id, @PathVariable(value = "otherId") Integer otherId) {
+        log.info("запущен_mutualFriend");
         return userService.mutualFriends(id, otherId);
-    }
-
-    private static void checkBody(User user) throws ValidationException {
-        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
-            throw new ValidationException("Некорректный адрес электронной почты");
-        }
-        if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Некорректный логин");
-        }
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-        if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем");
-        }
     }
 
 }

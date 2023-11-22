@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -13,6 +13,7 @@ public class User extends AbstractModel {
     private String email;
     private String login;
     private LocalDate birthday;
+    @JsonIgnore
     private Set<Integer> friends = new HashSet<>();
 
     public User(Integer id, String email, String login, String name, LocalDate birthday) {
@@ -30,7 +31,7 @@ public class User extends AbstractModel {
         friends.remove(id);
     }
 
-    public List<Integer> getFriends() {
-        return new ArrayList<>(friends);
+    public Set<Integer> getFriends() {
+        return friends;
     }
 }
