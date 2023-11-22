@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.Ui.ValidationException;
-import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.ui.ValidationException;
+import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;

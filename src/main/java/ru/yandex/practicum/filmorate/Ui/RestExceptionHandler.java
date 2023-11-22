@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.Ui;
+package ru.yandex.practicum.filmorate.ui;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -6,19 +6,20 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.yandex.practicum.filmorate.Ui.exception.ApiError;
-import ru.yandex.practicum.filmorate.Ui.exception.BadRequestException;
-import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.ui.exception.ApiError;
+import ru.yandex.practicum.filmorate.ui.exception.BadRequestException;
+import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@ControllerAdvice("ru.yandex.practicum.filmorate")
+@RestControllerAdvice("ru.yandex.practicum.filmorate")
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({EntityNotFoundException.class})
@@ -33,6 +34,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError error = new ApiError("Неверный запрос", ex.getMessage());
         logger.debug(ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({Throwable.class})
+    protected Object handleThrowable(Throwable ex, WebRequest request) {
+        ApiError error = new ApiError("Внутренняя ошибка сервера", ex.getMessage());
+        logger.debug(ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

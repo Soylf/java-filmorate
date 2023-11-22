@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.Ui.ValidationException;
-import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.ui.ValidationException;
+import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film deleteFilm(Integer id) {
         if (films.containsKey(id)) {
-            throw new ValidationException("Такого фильма нету.");
+            throw new EntityNotFoundException("Такого фильма нету.");
         }
         return films.remove(id);
     }

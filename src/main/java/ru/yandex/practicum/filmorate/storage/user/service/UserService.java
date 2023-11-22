@@ -4,7 +4,7 @@ package ru.yandex.practicum.filmorate.storage.user.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
