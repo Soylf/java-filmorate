@@ -28,21 +28,25 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
+        log.info("updateUser_запушен");
         return userStorage.updateUser(user);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
+        log.info("getAalUsers_запушен");
         return userStorage.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable(value = "id") Integer id) {
+        log.info("getUser_запушен");
         return userStorage.getUserId(id);
     }
 
     @DeleteMapping
     public User deleteUser(User user) {
+        log.info("deleteUser_запушен");
         return userStorage.deleteUser(user.getId());
     }
 
