@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import ru.yandex.practicum.filmorate.model.Components.FriendRequests;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -15,6 +16,8 @@ public class User extends AbstractModel {
     private LocalDate birthday;
     @JsonIgnore
     private Set<Integer> friends = new HashSet<>();
+    @JsonIgnore
+    private FriendRequests friendRequests;
 
     public User(Integer id, String email, String login, String name, LocalDate birthday) {
         super(id, name);

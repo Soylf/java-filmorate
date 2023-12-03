@@ -4,6 +4,9 @@ package ru.yandex.practicum.filmorate.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import ru.yandex.practicum.filmorate.model.Components.Genre;
+import ru.yandex.practicum.filmorate.model.Components.MPA;
+
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -18,6 +21,10 @@ public class Film extends AbstractModel {
     private Integer duration;
     @JsonIgnore
     private Set<Integer> like = new HashSet<>();
+    @JsonIgnore
+    private Genre genre;
+    @JsonIgnore
+    private MPA mpa;
 
     public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
         super(id, name);
