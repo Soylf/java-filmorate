@@ -1,5 +1,4 @@
-package ru.yandex.practicum.filmorate.model.Components;
-
+package ru.yandex.practicum.filmorate.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Genre {
+public class GenreDTO {
     private Integer id;
     private String name;
 }

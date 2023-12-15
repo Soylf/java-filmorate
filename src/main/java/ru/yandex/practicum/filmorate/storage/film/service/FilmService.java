@@ -1,53 +1,86 @@
 package ru.yandex.practicum.filmorate.storage.film.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.storage.film.dao.like.LikeStorage;
 import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
-@Service
 @Slf4j
-@RequiredArgsConstructor
+@Service
 public class FilmService {
-    private static final Comparator<Film> COMPARATOR_LIKES = (curFilm, nextFilm) -> nextFilm.getLike().size() - curFilm.getLike().size();
     private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
+    private final LikeStorage likeStorage;
+
+    @Autowired
+    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage, LikeStorage likeStorage) {
+        this.filmStorage = filmStorage;
+        this.likeStorage = likeStorage;
+    }
 
 
-    public boolean addLike(Integer idFilm, Integer idUser) {
-        Film film = filmStorage.getFilmId(idFilm);
-        userStorage.getUserId(idUser);
+    public List<Film> getAllFilms() {
+        return filmStorage.getAllFilms();
+    }
 
-        film.getLike().add(idUser);
-        log.info(film.getName() + " на фильме " + film.getLike().size() + " лайков");
+    public Film addFilm(Film film) {
+        checkBody(film);
+        return filmStorage.addFilm(film);
+    }
+
+    public Film getFilmById(int id) {
+        try {
+            return filmStorage.getFilmId(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("Film with id " + id + " does not exist.");
+        }
+    }
+
+    public Film updateFilm(Film film) {
+        checkBody(film);
+        return filmStorage.updateFilm(film);
+    }
+
+    public void deleteFilmById(int id) {
+        filmStorage.deleteFilm(id);
+    }
+
+    public boolean addLike(int idFilm, int idUser) {
+        likeStorage.addLike(idFilm, idUser);
         return true;
     }
 
-    public boolean deleteLike(Integer idFilm, Integer idUser) {
-        Film film = filmStorage.getFilmId(idFilm);
-
-
-        if (film.getLike().isEmpty()) {
-            log.error("Ошибка при удалении лайку у фильма");
-            throw new EntityNotFoundException("У данного фильма нет лайков");
-        }
-
-        film.getLike().remove(idUser);
-        log.info(film.getName() + " на фильме " + film.getLike().size() + " лайков");
+    public boolean deleteLike(int idFilm, int idUser) {
+        likeStorage.removeLike(idFilm, idUser);
         return true;
     }
 
     public List<Film> popularFilm(Integer count) {
-        List<Film> films = filmStorage.getAllFilms();
-        films.sort(COMPARATOR_LIKES);
+        return filmStorage.popularFilm(count);
+    }
 
-        log.info("выведен топ фильмов");
-        return films.stream().limit(count).collect(Collectors.toList());
+
+
+    private static void checkBody(Film film) throws ru.yandex.practicum.filmorate.ui.ValidationException {
+        if (film.getName().isEmpty()) {
+            throw new ru.yandex.practicum.filmorate.ui.ValidationException("Название фильма не может быть пустым");
+        }
+        if (film.getDescription().length() > 200) {
+            throw new ru.yandex.practicum.filmorate.ui.ValidationException("Описание фильма не может превышать 200 символов");
+        }
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+            throw new ru.yandex.practicum.filmorate.ui.ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года");
+        }
+        if (film.getDuration() <= 0) {
+            throw new ru.yandex.practicum.filmorate.ui.ValidationException("Продолжительность фильма должна быть положительной");
+        }
+
     }
 }

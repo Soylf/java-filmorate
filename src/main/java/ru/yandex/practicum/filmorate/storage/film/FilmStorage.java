@@ -7,7 +7,7 @@ import java.util.List;
 public interface FilmStorage {
     Film addFilm(Film film);
 
-    Film deleteFilm(Integer id);
+    void deleteFilm(Integer id);
 
     Film updateFilm(Film film);
 
@@ -15,4 +15,5 @@ public interface FilmStorage {
 
     Film getFilmId(Integer id);
 
+    List<Film> popularFilm(Integer countFilms);
 }

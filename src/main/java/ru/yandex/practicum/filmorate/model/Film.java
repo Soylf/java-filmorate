@@ -5,31 +5,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import ru.yandex.practicum.filmorate.model.Components.Genre;
-import ru.yandex.practicum.filmorate.model.Components.MPA;
+import ru.yandex.practicum.filmorate.model.Components.Mpa;
 
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
-public class Film extends AbstractModel {
+public class Film  {
 
+    private Integer id;
+    private String name;
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
     @JsonIgnore
     private Set<Integer> like = new HashSet<>();
+
+    private List<Genre> genres = new ArrayList<>();
     @JsonIgnore
-    private Genre genre;
-    @JsonIgnore
-    private MPA mpa;
+    private Mpa mpa;
 
     public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
-        super(id, name);
+        this.id = id;
+        this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
     }
+
+
 }

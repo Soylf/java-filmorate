@@ -2,25 +2,26 @@ package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import ru.yandex.practicum.filmorate.model.Components.FriendRequests;
 
 import java.time.LocalDate;
 import java.util.*;
 
 @Getter
 @Setter
-public class User extends AbstractModel {
+@Builder
+public class User  {
 
+    private Integer id;
+    private String name;
     private String email;
     private String login;
     private LocalDate birthday;
     @JsonIgnore
     private Set<Integer> friends = new HashSet<>();
-    @JsonIgnore
-    private FriendRequests friendRequests;
 
     public User(Integer id, String email, String login, String name, LocalDate birthday) {
-        super(id, name);
+        this.id = id;
+        this.name = name;
         this.email = email;
         this.login = login;
         this.birthday = birthday;
