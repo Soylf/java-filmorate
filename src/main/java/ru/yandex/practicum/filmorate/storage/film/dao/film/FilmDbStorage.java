@@ -43,7 +43,8 @@ public class FilmDbStorage implements FilmStorage {
 
     private Map<String, Object> filmToMap(Film film) {
         Map<String, Object> values = new HashMap<>();
-        values.put("film_name", film.getName());
+        values.put("id",film.getId());
+        values.put("name", film.getName());
         values.put("description", film.getDescription());
         values.put("release_date", film.getReleaseDate());
         values.put("duration", film.getDuration());
@@ -67,7 +68,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film addFilm(Film film) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("film")
-                .usingGeneratedKeyColumns("film_id");
+                .usingGeneratedKeyColumns("id");
         Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
         film.setId((Integer) key);
 
@@ -83,7 +84,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void deleteFilm(Integer id) {
-        String query = "DELETE FROM Film WHERE id=?";
+        String query = "DELETE FROM film WHERE id=?";
         int deleteResult = jdbcTemplate.update(query, id);
         if (deleteResult > 0) {
             log.info("Film with ID {} has been removed.", id);
@@ -100,31 +101,24 @@ public class FilmDbStorage implements FilmStorage {
         int updateResult = jdbcTemplate.update(query,
                 film.getName(),
                 film.getDescription(),
-                film.getReleaseDate(),
+                java.sql.Date.valueOf(film.getReleaseDate()), // Преобразование LocalDate в java.sql.Date
                 film.getDuration(),
                 film.getMpa().getId(),
                 filmId);
         if (updateResult > 0) {
             log.info("Film with ID {} has been updated.", filmId);
         } else {
-            throw new EntityNotFoundException("Film not founded for update by ID=" + filmId);
+            throw new EntityNotFoundException("Film not found for update by ID=" + filmId);
         }
 
-        if (!film.getGenres().isEmpty()) {
-            String querySql = "DELETE FROM genre_film WHERE id =?";
-            jdbcTemplate.update(querySql, filmId);
-            String insertGenreQuery = "INSERT INTO genre_film (id, genre_id) VALUES (?, ?)";
-            film.setGenres(film.getGenres()
-                    .stream()
-                    .distinct()
-                    .collect(Collectors.toList()));
-            for (Genre genre : film.getGenres()) {
-                jdbcTemplate.update(insertGenreQuery, filmId, genre.getId());
-            }
-        } else {
-            String querySql = "DELETE FROM genre_film WHERE id =?";
-            jdbcTemplate.update(querySql, filmId);
+        String deleteGenreQuery = "DELETE FROM genre_film WHERE film_id = ?";
+        jdbcTemplate.update(deleteGenreQuery, filmId);
+
+        String insertGenreQuery = "INSERT INTO genre_film (film_id, genre_id) VALUES (?, ?)";
+        for (Genre genre : film.getGenres()) {
+            jdbcTemplate.update(insertGenreQuery, filmId, genre.getId());
         }
+
         return film;
     }
 
@@ -137,15 +131,15 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film getFilmId(Integer id) {
-        String query = "SELECT * FROM film WHERE id = ";
-        log.info("films id returned from DB");
-        return jdbcTemplate.queryForObject(query,getFilmMapper(),id);
+        String query = "SELECT * FROM film WHERE id = ?";
+        log.info("Film ID {} returned from DB", id);
+        return jdbcTemplate.queryForObject(query, getFilmMapper(), id);
     }
     @Override
     public List<Film> popularFilm(Integer countFilms) {
         String query = "SELECT f.*, COUNT(lf.id) AS likes " +
                 "FROM Film f " +
-                "LEFT JOIN Like_Film lf ON f.film_id = lf.id " +
+                "LEFT JOIN Like_film lf ON f.id = lf.film_id " +
                 "GROUP BY f.id " +
                 "ORDER BY likes DESC " +
                 "LIMIT ?";

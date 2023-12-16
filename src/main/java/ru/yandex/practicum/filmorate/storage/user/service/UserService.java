@@ -1,71 +1,83 @@
 package ru.yandex.practicum.filmorate.storage.user.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    protected final UserStorage userStorage;
+    protected final UserStorage userDbStorage;
 
-    @Autowired
-    public UserService(@Qualifier("userDbRepository") UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
 
     public List<User> getAllUsers() {
-        return userStorage.getAllUsers();
+        return userDbStorage.getAllUsers();
     }
 
     public User addUser(User user) {
-        if (user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        return userStorage.addUser(user);
+        checkBody(user);
+        return userDbStorage.addUser(user);
     }
 
     public User getUserById(int id) {
         try {
-            return userStorage.getUserById(id);
+            return userDbStorage.getUserById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("User with id " + id + " does not exist.");
         }
     }
 
     public User updateUser(User user) {
-        return userStorage.updateUser(user);
+        checkBody(user);
+        return userDbStorage.updateUser(user);
     }
 
     public boolean deleteUserById(int id) {
-        userStorage.deleteUserById(id);
+        userDbStorage.deleteUserById(id);
         return true;
     }
 
     public boolean addFriend(int userId, int idFriend) {
-        userStorage.addFriend(userId, idFriend);
+        userDbStorage.addFriend(userId, idFriend);
         return true;
     }
 
     public boolean deleteFriendById(int userId, int idFriend) {
-        userStorage.deleteFriendById(userId, idFriend);
+        userDbStorage.deleteFriendById(userId, idFriend);
         return true;
     }
 
     public Set<Integer> getFriendsByIdUser(int id) {
-        return userStorage.getFriendsByUserId(id);
+        return userDbStorage.getFriendsByUserId(id);
     }
 
     public List<User> mutualFriends(int userId, int idFriend) {
-        return new ArrayList<>(userStorage.mutualFriends(userId, idFriend));
+        return new ArrayList<>(userDbStorage.mutualFriends(userId, idFriend));
+    }
+
+    private static void checkBody(User user) throws ru.yandex.practicum.filmorate.ui.ValidationException {
+        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
+            throw new ru.yandex.practicum.filmorate.ui.ValidationException("Некорректный адрес электронной почты");
+        }
+        if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
+            throw new ru.yandex.practicum.filmorate.ui.ValidationException("Некорректный логин");
+        }
+        if (user.getName() == null || user.getName().isEmpty()) {
+            user.setName(user.getLogin());
+        }
+        if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
+            throw new ru.yandex.practicum.filmorate.ui.ValidationException("Дата рождения не может быть в будущем");
+        }
     }
 }

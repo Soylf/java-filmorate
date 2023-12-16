@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.storage.user.dao;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -19,30 +21,17 @@ import java.util.*;
 
 
 @Repository
+@Qualifier("userDbStorage")
+@AllArgsConstructor
 @Slf4j
 public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public UserDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    private static RowMapper<User> getFilmMapper() {
-        return (rs, rowNum) -> new User(
-                rs.getInt("id"),
-                rs.getString("email"),
-                rs.getString("login"),
-                rs.getString("name"),
-                rs.getDate("birthday").toLocalDate()
-        );
-    }
-
     private User mapToUser(ResultSet rs, int rowNum) throws SQLException {
-        int userId = rs.getInt("user_id");
+        int userId = rs.getInt("id");
         String email = rs.getString("email");
         String login = rs.getString("login");
-        String name = rs.getString("name_user");
+        String name = rs.getString("name");
         LocalDate birthday = rs.getDate("birthday").toLocalDate();
         Set<Integer> friends =  getFriendsByUserId(userId);
 
@@ -88,7 +77,7 @@ public class UserDbStorage implements UserStorage {
     public User getUserById(Integer id) {
         String query = "SELECT * FROM user WHERE id=";
         log.info("users returned from DB");
-        return jdbcTemplate.queryForObject(query,getFilmMapper(),id);
+        return jdbcTemplate.queryForObject(query, this::mapToUser, id);
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.util.*;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User  {
 
     private Integer id;
@@ -17,15 +19,9 @@ public class User  {
     private String login;
     private LocalDate birthday;
     @JsonIgnore
-    private Set<Integer> friends = new HashSet<>();
+    private Set<Integer> friends;
 
-    public User(Integer id, String email, String login, String name, LocalDate birthday) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.login = login;
-        this.birthday = birthday;
-    }
+
 
     public void addFriend(Integer id) {
         friends.add(id);

@@ -3,12 +3,14 @@ package ru.yandex.practicum.filmorate.storage.film.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.storage.film.dao.like.LikeStorage;
 import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.Ui.exception.*;
 
 import java.time.LocalDate;
 import java.util.*;
