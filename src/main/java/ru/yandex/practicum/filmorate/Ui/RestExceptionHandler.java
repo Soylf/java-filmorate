@@ -1,6 +1,7 @@
-package ru.yandex.practicum.filmorate.ui;
+package ru.yandex.practicum.filmorate.Ui;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.yandex.practicum.filmorate.ui.exception.ApiError;
-import ru.yandex.practicum.filmorate.ui.exception.BadRequestException;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.Ui.exception.ApiError;
+import ru.yandex.practicum.filmorate.Ui.exception.BadRequestException;
+import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +45,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders header, HttpStatus status, WebRequest request) {
+    protected @NotNull ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders header, HttpStatus status, WebRequest request) {
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
 
         logger.debug("Данные не прошли валидацию.");

@@ -20,27 +20,27 @@ public class GenreDbStorage implements GenreStorage{
     private Genre mapRowToGenre(ResultSet resultSet, int i) throws SQLException {
         return Genre.builder()
                 .id(resultSet.getInt("genre_id"))
-                .name(resultSet.getString("genre_name"))
+                .name(resultSet.getString("name"))
                 .build();
     }
 
     @Override
     public Optional<Genre> getById(Integer id) {
-        String query = "SELECT genre_id, genre_name FROM Genre WHERE genre_id = ?";
+        String query = "SELECT genre_id, name FROM Genre WHERE genre_id = ?";
         log.info("SELECT request to DB genre by id=" + id);
         return Optional.ofNullable(jdbcTemplate.queryForObject(query, this::mapRowToGenre, id));
     }
 
     @Override
     public List<Genre> getAll() {
-        String query = "SELECT genre_id, genre_name FROM Genre";
+        String query = "SELECT genre_id, name FROM Genre";
         log.info("SELECT all genres from DB");
         return jdbcTemplate.query(query, this::mapRowToGenre);
     }
 
     @Override
     public List<Genre> getGenresByFilmId(int filmId) {
-        String query = "SELECT g.genre_id, g.genre_name " +
+        String query = "SELECT g.genre_id, g.name " +
                 "FROM Genre g " +
                 "JOIN Genre_Film gf ON g.genre_id = gf.genre_id " +
                 "WHERE gf.film_id = ?";

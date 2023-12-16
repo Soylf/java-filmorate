@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.ui.exception;
+package ru.yandex.practicum.filmorate.Ui.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

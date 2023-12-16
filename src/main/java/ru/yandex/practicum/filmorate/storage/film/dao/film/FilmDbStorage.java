@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.film.dao.film;
 
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,22 +9,23 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Components.Genre;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.film.dao.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+
 
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 
 @Repository
+@Qualifier("filmDbStorage")
+@AllArgsConstructor
 @Slf4j
 public class FilmDbStorage implements FilmStorage {
 
@@ -32,18 +34,9 @@ public class FilmDbStorage implements FilmStorage {
     private final MpaStorage mpaStorage;
     private final LikeStorage likeStorage;
 
-    @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate, GenreStorage genreStorage, MpaStorage mpaStorage, LikeStorage likeStorage) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.genreStorage = genreStorage;
-        this.mpaStorage = mpaStorage;
-        this.likeStorage = likeStorage;
-    }
-
 
     private Map<String, Object> filmToMap(Film film) {
         Map<String, Object> values = new HashMap<>();
-        values.put("id",film.getId());
         values.put("name", film.getName());
         values.put("description", film.getDescription());
         values.put("release_date", film.getReleaseDate());
@@ -67,13 +60,13 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film addFilm(Film film) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("film")
+                .withTableName("Film")
                 .usingGeneratedKeyColumns("id");
         Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
         film.setId((Integer) key);
 
         if (!film.getGenres().isEmpty()) {
-            String query = "INSERT INTO genre_film (film_id, genre_id) VALUES (?,?)";
+            String query = "INSERT INTO Genre_Film (film_id, genre_id) VALUES (?,?)";
             for (Genre genre : film.getGenres()) {
                 jdbcTemplate.update(query, film.getId(), genre.getId());
             }
@@ -84,7 +77,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void deleteFilm(Integer id) {
-        String query = "DELETE FROM film WHERE id=?";
+        String query = "DELETE FROM Film WHERE id=?";
         int deleteResult = jdbcTemplate.update(query, id);
         if (deleteResult > 0) {
             log.info("Film with ID {} has been removed.", id);
@@ -95,7 +88,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        String query = "UPDATE film SET name=?, description=?, release_date=?, duration=?, mpa_id=? " +
+        String query = "UPDATE Film SET name=?, description=?, release_date=?, duration=?, mpa_id=? " +
                 "WHERE id=?";
         int filmId = film.getId();
         int updateResult = jdbcTemplate.update(query,
@@ -111,7 +104,7 @@ public class FilmDbStorage implements FilmStorage {
             throw new EntityNotFoundException("Film not found for update by ID=" + filmId);
         }
 
-        String deleteGenreQuery = "DELETE FROM genre_film WHERE film_id = ?";
+        String deleteGenreQuery = "DELETE FROM Genre_Film WHERE film_id = ?";
         jdbcTemplate.update(deleteGenreQuery, filmId);
 
         String insertGenreQuery = "INSERT INTO genre_film (film_id, genre_id) VALUES (?, ?)";
@@ -124,14 +117,14 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getAllFilms() {
-        String query = "SELECT * FROM film";
+        String query = "SELECT * FROM Film";
         log.info("All films returned from DB");
         return jdbcTemplate.query(query, getFilmMapper());
     }
 
     @Override
     public Film getFilmId(Integer id) {
-        String query = "SELECT * FROM film WHERE id = ?";
+        String query = "SELECT * FROM Film WHERE id = ?";
         log.info("Film ID {} returned from DB", id);
         return jdbcTemplate.queryForObject(query, getFilmMapper(), id);
     }

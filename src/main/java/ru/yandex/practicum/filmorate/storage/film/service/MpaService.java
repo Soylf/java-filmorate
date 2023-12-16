@@ -3,9 +3,10 @@ package ru.yandex.practicum.filmorate.storage.film.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Components.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+
 
 import java.util.List;
 
