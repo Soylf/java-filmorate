@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
@@ -11,13 +11,9 @@ import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class GenreService {
         private final GenreStorage genreStorage;
-
-        @Autowired
-        public GenreService(GenreStorage genreStorage) {
-            this.genreStorage = genreStorage;
-        }
 
         public Genre getGenreById(int id) {
             try {
