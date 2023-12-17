@@ -20,7 +20,7 @@ public class MpaDbStorage implements MpaStorage{
     private Mpa mapToMpa(ResultSet rs, int rowNum) throws SQLException {
         return Mpa.builder()
                 .id(rs.getInt("mpa_id"))
-                .name(rs.getString("mpa_name"))
+                .name(rs.getString("name"))
                 .build();
     }
 
