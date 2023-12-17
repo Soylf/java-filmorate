@@ -3,9 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.yandex.practicum.filmorate.model.Components.AbstractModel;
 import ru.yandex.practicum.filmorate.model.Components.Genre;
 import ru.yandex.practicum.filmorate.model.Components.Mpa;
 
