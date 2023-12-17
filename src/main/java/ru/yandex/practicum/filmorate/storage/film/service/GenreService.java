@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
-import ru.yandex.practicum.filmorate.model.сomponents.Genre;
+import ru.yandex.practicum.filmorate.model.impl.Genre;
 import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
 
 
