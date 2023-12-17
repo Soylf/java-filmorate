@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;
 import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
-import ru.yandex.practicum.filmorate.model.Components.Genre;
+import ru.yandex.practicum.filmorate.model.сomponents.Genre;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 

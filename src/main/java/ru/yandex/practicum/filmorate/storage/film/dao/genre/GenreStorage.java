@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film.dao.genre;
 
-import ru.yandex.practicum.filmorate.model.Components.Genre;
+import ru.yandex.practicum.filmorate.model.сomponents.Genre;
 
 import java.util.List;
 import java.util.Optional;
