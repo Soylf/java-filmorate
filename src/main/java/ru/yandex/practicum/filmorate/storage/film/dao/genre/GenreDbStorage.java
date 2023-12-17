@@ -26,14 +26,14 @@ public class GenreDbStorage implements GenreStorage{
 
     @Override
     public Optional<Genre> getById(Integer id) {
-        String query = "SELECT genre_id, name FROM Genre WHERE genre_id = ?";
+        String query = "SELECT * FROM Genre WHERE genre_id = ?";
         log.info("SELECT request to DB genre by id=" + id);
         return Optional.ofNullable(jdbcTemplate.queryForObject(query, this::mapRowToGenre, id));
     }
 
     @Override
     public List<Genre> getAll() {
-        String query = "SELECT genre_id, name FROM Genre";
+        String query = "SELECT * FROM Genre";
         log.info("SELECT all genres from DB");
         return jdbcTemplate.query(query, this::mapRowToGenre);
     }

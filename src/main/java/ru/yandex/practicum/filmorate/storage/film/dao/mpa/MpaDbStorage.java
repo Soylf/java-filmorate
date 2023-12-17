@@ -33,7 +33,7 @@ public class MpaDbStorage implements MpaStorage{
 
     @Override
     public List<Mpa> getAllMpa() {
-        String query = "SELECT mpa_id, name FROM Mpa";
+        String query = "SELECT * FROM Mpa";
         log.info("SELECT all Mpa from DB");
         return jdbcTemplate.query(query, this::mapToMpa);
     }
