@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.storage.user.service;
 
 
-import lombok.RequiredArgsConstructor;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Ui.ValidationException;
-import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.ui.ValidationException;
+import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -17,57 +16,60 @@ import java.util.Set;
 
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
-    protected final UserStorage userDbStorage;
+    protected final UserStorage userStorage;
+
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
 
     public List<User> getAllUsers() {
-        return userDbStorage.getAllUsers();
+        return userStorage.getAllUsers();
     }
 
     public User addUser(User user) {
-        checkBody(user);
-        return userDbStorage.addUser(user);
+        checkUser(user);
+        return userStorage.addUser(user);
     }
 
     public User getUserById(int id) {
         try {
-            return userDbStorage.getUserById(id);
+            return userStorage.getUserById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("User with id " + id + " does not exist.");
         }
     }
 
     public User updateUser(User user) {
-        checkBody(user);
-        return userDbStorage.updateUser(user);
+        checkUser(user);
+        return userStorage.updateUser(user);
     }
 
     public boolean deleteUserById(int id) {
-        userDbStorage.deleteUserById(id);
+        userStorage.deleteUserById(id);
         return true;
     }
 
     public boolean addFriend(int userId, int idFriend) {
-        userDbStorage.addFriend(userId, idFriend);
+        userStorage.addFriend(userId, idFriend);
         return true;
     }
 
     public boolean deleteFriendById(int userId, int idFriend) {
-        userDbStorage.deleteFriendById(userId, idFriend);
+        userStorage.deleteFriendById(userId, idFriend);
         return true;
     }
 
     public Set<Integer> getFriendsByIdUser(int id) {
-        return userDbStorage.getFriendsByUserId(id);
+        return userStorage.getFriendsByUserId(id);
     }
 
     public List<User> mutualFriends(int userId, int idFriend) {
-        return new ArrayList<>(userDbStorage.mutualFriends(userId, idFriend));
+        return new ArrayList<>(userStorage.mutualFriends(userId, idFriend));
     }
 
-    private static void checkBody(User user) throws ValidationException {
+    private static void checkUser(User user) throws ValidationException {
         if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             throw new ValidationException("Некорректный адрес электронной почты");
         }

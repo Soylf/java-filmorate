@@ -25,7 +25,7 @@ public class MpaDbStorage implements MpaStorage{
     }
 
     @Override
-    public Optional<Mpa> getMpaById(int id) {
+    public Optional<Mpa> getMpaById(Integer id) {
         String query = "SELECT * FROM Mpa WHERE mpa_id=?";
         log.info("Mpa with ID {} returned.", id);
         return Optional.ofNullable(jdbcTemplate.queryForObject(query, this::mapToMpa, id));

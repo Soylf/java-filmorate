@@ -2,10 +2,11 @@ package ru.yandex.practicum.filmorate.storage.film.dao.like;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
+@Qualifier("LikeDbStorage")
 public class LikeDbStorage implements  LikeStorage {
     private JdbcTemplate jdbcTemplate;
 

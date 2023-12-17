@@ -39,7 +39,7 @@ public class GenreDbStorage implements GenreStorage{
     }
 
     @Override
-    public List<Genre> getGenresByFilmId(int filmId) {
+    public List<Genre> getGenresByFilmId(Integer filmId) {
         String query = "SELECT g.genre_id, g.name " +
                 "FROM Genre g " +
                 "JOIN Genre_Film gf ON g.genre_id = gf.genre_id " +

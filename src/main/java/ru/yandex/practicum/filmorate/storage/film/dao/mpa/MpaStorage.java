@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MpaStorage {
-    Optional<Mpa> getMpaById(int id);
+    public Optional<Mpa> getMpaById(Integer id);
 
     List<Mpa> getAllMpa();
 }

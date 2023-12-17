@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d65f4c33-e799-4143-a065-b8e1268f9c68" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/AbstractModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/Ui/RestExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/RestExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/Ui/ValidationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/ValidationException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/Ui/exception/ApiError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/exception/ApiError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/Ui/exception/BadRequestException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/exception/BadRequestException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/Ui/exception/EntityNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/exception/EntityNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/dto/FilmDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/dto/GenreDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/dto/MpaDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/dto/UserDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Genre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Film.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Film.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/film/FilmDbStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/film/FilmDbStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/genre/GenreDbStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/genre/GenreDbStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/genre/GenreStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/genre/GenreStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/like/LikeDbStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/like/LikeDbStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaDbStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaDbStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/service/FilmService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/service/FilmService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/service/GenreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/service/GenreService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/service/MpaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/service/MpaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/user/dao/UserDbStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/user/dao/UserDbStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/user/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shema.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="8fa43e9b-6248-4013-bf84-eb675fe874bc" />
+        <option name="url" value="git@github.com:Soylf/java-filmorate.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="2Z5Kqo4OGZ9C6bOICd1QNuKsClx" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/dev/java-filmorate&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\dev\java-filmorate" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="java-filmorate" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="java-filmorate" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d65f4c33-e799-4143-a065-b8e1268f9c68" name="Changes" comment="" />
+      <created>1701706707051</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1701706707051</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/controller/UserController.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <inline-watch fileUrl="file://$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/controller/UserController.java" line="28">
+        <watch expression="((UserController)this).userService" language="JAVA" custom="ru.yandex.practicum.filmorate.controller.UserController" />
+      </inline-watch>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.github.evgenys91.machinet.common.dslhistory.DslHistoryState">
+    <option name="historyDtoById">
+      <map>
+        <entry key="60ead1">
+          <value>
+            <ChatHistoryModel>
+              <option name="contextFilesPaths">
+                <list>
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/film/FilmDbStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Mpa.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/exception/EntityNotFoundException.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Genre.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Film.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/FilmStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/AbstractModel.java" />
+                </list>
+              </option>
+              <option name="id" value="60ead1" />
+              <option name="initiateTms" value="1702807039246" />
+              <option name="request" value="добавь в getFilmMapper mpa" />
+              <option name="response" value="" />
+              <option name="responseDescription" value="To add the `mpa` field to the `getFilmMapper` method in the `FilmDbStorage` class, you need to modify the `RowMapper` lambda expression. Here's the updated code:&#10;&#10;```java&#10;private static RowMapper&lt;Film&gt; getFilmMapper() {&#10;    return (rs, rowNum) -&gt; new Film(&#10;        rs.getInt(&quot;id&quot;),&#10;        rs.getString(&quot;name&quot;),&#10;        rs.getString(&quot;description&quot;),&#10;        rs.getDate(&quot;release_date&quot;).toLocalDate(),&#10;        rs.getInt(&quot;duration&quot;),&#10;        mpaStorage.getMpaById(rs.getInt(&quot;mpa_id&quot;)).orElse(null)&#10;    );&#10;}&#10;```&#10;&#10;Make sure to import the `MpaStorage` class at the top of the file:&#10;&#10;```java&#10;import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;&#10;```&#10;&#10;This will fetch the `mpa` object using the `MpaStorage` and set it in the `Film` object during mapping." />
+              <option name="responseFileName" value="" />
+              <option name="responseFilePath" value="" />
+              <option name="responseTms" value="1702807043362" />
+              <option name="usedLocalFilePaths">
+                <list>
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/film/FilmDbStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/FilmStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Mpa.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/AbstractModel.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/exception/EntityNotFoundException.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Genre.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Film.java" />
+                </list>
+              </option>
+            </ChatHistoryModel>
+          </value>
+        </entry>
+        <entry key="aa53c6">
+          <value>
+            <ChatHistoryModel>
+              <option name="contextFilesPaths">
+                <list>
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/film/FilmDbStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Film.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Genre.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/genre/GenreStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/exception/EntityNotFoundException.java" />
+                </list>
+              </option>
+              <option name="id" value="aa53c6" />
+              <option name="initiateTms" value="1702808271105" />
+              <option name="request" value="преобразуй в пакетную вставку @Override&#10;    public Film addFilm(Film film) {&#10;        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)&#10;                .withTableName(&quot;Film&quot;)&#10;                .usingGeneratedKeyColumns(&quot;id&quot;);&#10;        Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));&#10;        film.setId((Integer) key);&#10;&#10;        if (!film.getGenres().isEmpty()) {&#10;            String query = &quot;INSERT INTO Genre_Film (film_id, genre_id) VALUES (?,?)&quot;;&#10;            for (Genre genre : film.getGenres()) {&#10;                jdbcTemplate.update(query, film.getId(), genre.getId());&#10;            }&#10;        }&#10;        log.info(&quot;Film with ID {} saved.&quot;, film.getId());&#10;        return film;&#10;    }" />
+              <option name="response" value="" />
+              <option name="responseDescription" value="To convert the `addFilm` method to a batch insert using `SimpleJdbcInsert`, you can modify the code as follows:&#10;&#10;```java&#10;@Override&#10;public Film addFilm(Film film) {&#10;    SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)&#10;            .withTableName(&quot;Film&quot;)&#10;            .usingGeneratedKeyColumns(&quot;id&quot;);&#10;&#10;    Map&lt;String, Object&gt; filmMap = filmToMap(film);&#10;    Number key = simpleJdbcInsert.executeAndReturnKey(filmMap);&#10;    film.setId((Integer) key);&#10;&#10;    List&lt;Map&lt;String, Object&gt;&gt; genreFilmMaps = new ArrayList&lt;&gt;();&#10;    if (!film.getGenres().isEmpty()) {&#10;        for (Genre genre : film.getGenres()) {&#10;            Map&lt;String, Object&gt; genreFilmMap = new HashMap&lt;&gt;();&#10;            genreFilmMap.put(&quot;film_id&quot;, film.getId());&#10;            genreFilmMap.put(&quot;genre_id&quot;, genre.getId());&#10;            genreFilmMaps.add(genreFilmMap);&#10;        }&#10;    }&#10;&#10;    if (!genreFilmMaps.isEmpty()) {&#10;        String query = &quot;INSERT INTO Genre_Film (film_id, genre_id) VALUES (:film_id, :genre_id)&quot;;&#10;        SqlParameterSource[] batchParams = SqlParameterSourceUtils.createBatch(genreFilmMaps.toArray());&#10;        jdbcTemplate.batchUpdate(query, batchParams);&#10;    }&#10;&#10;    log.info(&quot;Film with ID {} saved.&quot;, film.getId());&#10;    return film;&#10;}&#10;```&#10;&#10;In this updated code, we create a list of `Map&lt;String, Object&gt;` objects to represent the genre-film mappings. We then use `SqlParameterSourceUtils.createBatch()` to convert the list into an array of `SqlParameterSource` objects for batch insertion. Finally, we use `jdbcTemplate.batchUpdate()` to perform the batch insert operation.&#10;&#10;Make sure to import the necessary classes at the top of the file:&#10;&#10;```java&#10;import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;&#10;import org.springframework.jdbc.core.namedparam.SqlParameterSource;&#10;import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;&#10;```&#10;&#10;Note: The `Genre_Film` table should have columns named `film_id` and `genre_id` to match the column names used in the batch insert query." />
+              <option name="responseFileName" value="" />
+              <option name="responseFilePath" value="" />
+              <option name="responseTms" value="1702808278681" />
+              <option name="usedLocalFilePaths">
+                <list>
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/film/FilmDbStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/mpa/MpaStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/dao/genre/GenreStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/storage/film/FilmStorage.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Mpa.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/AbstractModel.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/ui/exception/EntityNotFoundException.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Components/Genre.java" />
+                  <option value="$PROJECT_DIR$/src/main/java/ru/yandex/practicum/filmorate/model/Film.java" />
+                </list>
+              </option>
+            </ChatHistoryModel>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/java_filmorate$FilmorateApplication.ic" NAME="FilmorateApplication Coverage Results" MODIFIED="1702646118548" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>ru.yandex.practicum.filmorate.*</FILTER>
+    </SUITE>
+  </component>
+</project>

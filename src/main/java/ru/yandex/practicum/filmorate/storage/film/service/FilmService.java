@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Ui.ValidationException;
+import ru.yandex.practicum.filmorate.ui.ValidationException;
 import ru.yandex.practicum.filmorate.storage.film.dao.like.LikeStorage;
 
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.Ui.exception.*;
+import ru.yandex.practicum.filmorate.ui.exception.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -23,7 +23,7 @@ public class FilmService {
     private final LikeStorage likeStorage;
 
     @Autowired
-    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage, LikeStorage likeStorage) {
+    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage, @Qualifier("LikeDbStorage")LikeStorage likeStorage) {
         this.filmStorage = filmStorage;
         this.likeStorage = likeStorage;
     }

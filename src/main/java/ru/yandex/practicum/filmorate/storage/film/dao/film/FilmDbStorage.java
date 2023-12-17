@@ -3,25 +3,22 @@ package ru.yandex.practicum.filmorate.storage.film.dao.film;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.Ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;
+import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.Components.Genre;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
-import ru.yandex.practicum.filmorate.storage.film.dao.like.LikeStorage;
-import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;
 
 
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @Qualifier("filmDbStorage")
@@ -30,9 +27,9 @@ import java.util.Map;
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    private final GenreStorage genreStorage;
     private final MpaStorage mpaStorage;
-    private final LikeStorage likeStorage;
+    private final GenreStorage genreStorage;
+
 
 
     private Map<String, Object> filmToMap(Film film) {
@@ -46,14 +43,18 @@ public class FilmDbStorage implements FilmStorage {
     }
 
 
-    private static RowMapper<Film> getFilmMapper() {
-        return (rs, rowNum) -> new Film(
-                rs.getInt("id"),
-                rs.getString("name"),
-                rs.getString("description"),
-                rs.getDate("release_date").toLocalDate(),
-                rs.getInt("duration")
-        );
+    private RowMapper<Film> getFilmMapper() {
+        return (rs, rowNum) -> {
+            Film film = new Film();
+            film.setId(rs.getInt("id"));
+            film.setName(rs.getString("name"));
+            film.setDescription(rs.getString("description"));
+            film.setReleaseDate(rs.getDate("release_date").toLocalDate());
+            film.setDuration(rs.getInt("duration"));
+            film.setMpa(mpaStorage.getMpaById(rs.getInt("mpa_id")).get());
+            film.setGenres(genreStorage.getGenresByFilmId(film.getId()));
+            return film;
+        };
     }
 
 
@@ -62,15 +63,27 @@ public class FilmDbStorage implements FilmStorage {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("Film")
                 .usingGeneratedKeyColumns("id");
-        Number key = simpleJdbcInsert.executeAndReturnKey(filmToMap(film));
+
+        Map<String, Object> filmMap = filmToMap(film);
+        Number key = simpleJdbcInsert.executeAndReturnKey(filmMap);
         film.setId((Integer) key);
 
+        List<Map<String, Object>> genreFilmMaps = new ArrayList<>();
         if (!film.getGenres().isEmpty()) {
-            String query = "INSERT INTO Genre_Film (film_id, genre_id) VALUES (?,?)";
             for (Genre genre : film.getGenres()) {
-                jdbcTemplate.update(query, film.getId(), genre.getId());
+                Map<String, Object> genreFilmMap = new HashMap<>();
+                genreFilmMap.put("film_id", film.getId());
+                genreFilmMap.put("genre_id", genre.getId());
+                genreFilmMaps.add(genreFilmMap);
             }
         }
+
+        if (!genreFilmMaps.isEmpty()) {
+            String query = "INSERT INTO Genre_Film (film_id, genre_id) VALUES (:film_id, :genre_id)";
+            SqlParameterSource[] batchParams = SqlParameterSourceUtils.createBatch(genreFilmMaps.toArray());
+            jdbcTemplate.batchUpdate(query, Collections.singletonList(batchParams));
+        }
+
         log.info("Film with ID {} saved.", film.getId());
         return film;
     }

@@ -3,7 +3,9 @@ package ru.yandex.practicum.filmorate.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.yandex.practicum.filmorate.model.Components.AbstractModel;
 import ru.yandex.practicum.filmorate.model.Components.Genre;
 import ru.yandex.practicum.filmorate.model.Components.Mpa;
 
@@ -13,10 +15,9 @@ import java.util.*;
 
 @Getter
 @Setter
-public class Film  {
+public class Film extends AbstractModel {
 
-    private Integer id;
-    private String name;
+
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
@@ -24,16 +25,20 @@ public class Film  {
     private Set<Integer> like = new HashSet<>();
 
     private List<Genre> genres = new ArrayList<>();
-    @JsonIgnore
+
     private Mpa mpa;
 
-    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
-        this.id = id;
-        this.name = name;
+    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration, Mpa mpa, List<Genre> genres) {
+        super(id, name);
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.mpa = mpa;
+        this.genres = genres;
     }
 
 
+    public Film() {
+        super();
+    }
 }
