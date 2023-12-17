@@ -1,4 +1,4 @@
-
+DROP ALL OBJECTS DELETE FILES;
 
 CREATE TABLE IF NOT EXISTS User_Filmorate
 (
@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS Film
     description   VARCHAR,
     release_date  DATE,
     duration      INTEGER,
-    rate          INTEGER,
     mpa_id        INTEGER,
     FOREIGN KEY (mpa_id) REFERENCES mpa(mpa_id) ON DELETE CASCADE
 );
@@ -57,18 +56,3 @@ CREATE TABLE IF NOT EXISTS Friendship
     user_id       INTEGER,
     FOREIGN KEY (user_id) REFERENCES User_Filmorate(id) ON DELETE CASCADE
 );
-
-INSERT INTO Genre (name)
-VALUES ('Комедия'),
-    ('Драма'),
-    ('Мультфильм'),
-    ('Триллер'),
-    ('Документальный'),
-    ('Боевик');
-
-INSERT INTO Mpa (name)
-VALUES ('G'),
-       ('PG'),
-       ('PG-13'),
-       ('R'),
-       ('NC-17');
