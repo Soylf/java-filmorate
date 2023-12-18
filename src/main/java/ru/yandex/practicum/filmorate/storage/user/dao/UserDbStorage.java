@@ -158,7 +158,7 @@ public class UserDbStorage implements UserStorage {
                 "WHERE f1.user_id = ? AND f2.user_id = ? AND f1.friend_id = f2.friend_id";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, sourceId, otherId);
         while (sqlRowSet.next()) {
-            int friendId = sqlRowSet.getInt("id");
+            int friendId = sqlRowSet.getInt("friend_id");
             commonFriends.add(getUserById(friendId));
         }
         return commonFriends;
