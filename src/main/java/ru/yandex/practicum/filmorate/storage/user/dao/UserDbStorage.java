@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.errorException.ValidationException;
 import ru.yandex.practicum.filmorate.errorException.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -32,13 +33,18 @@ public class UserDbStorage implements UserStorage {
         String name = rs.getString("name");
         LocalDate birthday = rs.getDate("birthday").toLocalDate();
 
-        return User.builder()
-                .id(userId)
-                .email(email)
-                .login(login)
-                .name(name)
-                .birthday(birthday)
-                .build();
+        User user = new User();
+        user.setId(userId);
+        user.setEmail(email);
+        user.setLogin(login);
+        user.setName(name);
+        user.setBirthday(birthday);
+
+        // Set the id and name fields from the superclass
+        user.setId(userId);
+        user.setName(name);
+
+        return user;
     }
 
     private Map<String, Object> userToMap(User user) {
@@ -60,6 +66,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
+        checkUser(user);
+
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("User_Filmorate")
                 .usingGeneratedKeyColumns("id");
@@ -71,13 +79,15 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUserById(Integer id) {
-        String query = "SELECT * FROM User_Filmorate WHERE id=";
+        String query = "SELECT id, email, login, name, birthday FROM User_Filmorate WHERE id=?";
         log.info("users returned from DB");
         return jdbcTemplate.queryForObject(query, this::mapToUser, id);
     }
 
     @Override
     public User updateUser(User user) {
+        checkUser(user);
+
         String query = "UPDATE User_Filmorate SET email=?, login=?, name=?, birthday=? WHERE id=?";
         int userId = user.getId();
         int updateResult = jdbcTemplate.update(query,
@@ -142,16 +152,30 @@ public class UserDbStorage implements UserStorage {
     @Override
     public List<User> mutualFriends(Integer sourceId, Integer otherId) {
         List<User> commonFriends = new ArrayList<>();
-        String query = "SELECT u.* FROM Friendship f1 " +
+        String query = "SELECT u.id, u.email, u.login, u.name, u.birthday FROM Friendship f1 " +
                 "INNER JOIN Friendship f2 ON f1.friend_id = f2.friend_id " +
                 "INNER JOIN User_Filmorate u ON f1.friend_id = u.id " +
                 "WHERE f1.user_id = ? AND f2.user_id = ? AND f1.friend_id = f2.friend_id";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, sourceId, otherId);
         while (sqlRowSet.next()) {
-            int friendId = sqlRowSet.getInt("user_id");
+            int friendId = sqlRowSet.getInt("id");
             commonFriends.add(getUserById(friendId));
         }
         return commonFriends;
     }
 
+    private static void checkUser(User user) throws ValidationException {
+        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
+            throw new ValidationException("Некорректный адрес электронной почты");
+        }
+        if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
+            throw new ValidationException("Некорректный логин");
+        }
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
+        if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
+            throw new ValidationException("Дата рождения не может быть в будущем");
+        }
+    }
 }

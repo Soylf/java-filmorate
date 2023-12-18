@@ -29,11 +29,10 @@ public class UserService {
     }
 
     public User addUser(User user) {
-        checkUser(user);
         return userStorage.addUser(user);
     }
 
-    public User getUserById(int id) {
+    public User getUserById(Integer id) {
         try {
             return userStorage.getUserById(id);
         } catch (EmptyResultDataAccessException e) {
@@ -42,7 +41,6 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        checkUser(user);
         return userStorage.updateUser(user);
     }
 
@@ -67,20 +65,5 @@ public class UserService {
 
     public List<User> mutualFriends(int userId, int idFriend) {
         return new ArrayList<>(userStorage.mutualFriends(userId, idFriend));
-    }
-
-    private static void checkUser(User user) throws ValidationException {
-        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
-            throw new ValidationException("Некорректный адрес электронной почты");
-        }
-        if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            throw new ValidationException("Некорректный логин");
-        }
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
-        if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем");
-        }
     }
 }

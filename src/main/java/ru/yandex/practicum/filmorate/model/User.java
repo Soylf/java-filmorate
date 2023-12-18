@@ -6,11 +6,10 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
+
 public class User extends AbstractModel {
 
-    private Integer id;
-    private String name;
     private String email;
     private String login;
     private LocalDate birthday;
