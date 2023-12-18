@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.storage.film.service;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.errorException.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.impl.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;
 

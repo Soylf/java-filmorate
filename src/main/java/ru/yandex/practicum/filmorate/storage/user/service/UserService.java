@@ -4,8 +4,8 @@ package ru.yandex.practicum.filmorate.storage.user.service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.ui.ValidationException;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.errorException.ValidationException;
+import ru.yandex.practicum.filmorate.errorException.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 

@@ -1,5 +1,4 @@
-package ru.yandex.practicum.filmorate.ui;
-
+package ru.yandex.practicum.filmorate.errorException;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -11,11 +10,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.yandex.practicum.filmorate.ui.exception.ApiError;
-import ru.yandex.practicum.filmorate.ui.exception.BadRequestException;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.errorException.exception.ApiError;
+import ru.yandex.practicum.filmorate.errorException.exception.BadRequestException;
+import ru.yandex.practicum.filmorate.errorException.exception.EntityNotFoundException;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,23 +24,30 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({EntityNotFoundException.class})
-    protected ResponseEntity<Object> handleRuntimeEx(EntityNotFoundException ex, WebRequest request) {
-        ApiError error = new ApiError("Объект не найден", ex.getMessage());
-        logger.debug(ex.getMessage());
+    protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+
+        logger.debug("Объект не найден.");
+        ApiError error = new ApiError("Объект не найден", ex.getMessage(), errors);
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({BadRequestException.class})
     protected ResponseEntity<Object> handleBadRequestExceptionEx(BadRequestException ex, WebRequest request) {
-        ApiError error = new ApiError("Неверный запрос", ex.getMessage());
-        logger.debug(ex.getMessage());
+        List<String> errors = Collections.singletonList(ex.getMessage()); // Пример, можно улучшить в зависимости от требований
+
+        logger.debug("Неверный запрос.");
+        ApiError error = new ApiError("Неверный запрос", ex.getMessage(), errors);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler({Throwable.class})
-    protected Object handleThrowable(Throwable ex, WebRequest request) {
-        ApiError error = new ApiError("Внутренняя ошибка сервера", ex.getMessage());
-        logger.debug(ex.getMessage());
+    protected ResponseEntity<Object> handleThrowable(Throwable ex, WebRequest request) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+
+        logger.debug("Произошла внутренняя ошибка сервера.");
+        ApiError error = new ApiError("Внутренняя ошибка сервера", ex.getMessage(), errors);
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

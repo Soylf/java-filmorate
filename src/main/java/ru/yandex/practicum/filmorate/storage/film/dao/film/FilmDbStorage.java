@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.film.dao.mpa.MpaStorage;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.errorException.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.impl.Genre;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -51,8 +51,6 @@ public class FilmDbStorage implements FilmStorage {
             film.setDescription(rs.getString("description"));
             film.setReleaseDate(rs.getDate("release_date").toLocalDate());
             film.setDuration(rs.getInt("duration"));
-            film.setMpa(mpaStorage.getMpaById(rs.getInt("mpa_id")).get());
-            film.setGenres(genreStorage.getGenresByFilmId(film.getId()));
             return film;
         };
     }
@@ -101,17 +99,22 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film updateFilm(Film film) {
-        String query = "UPDATE Film SET name=?, description=?, release_date=?, duration=?, mpa_id=? " +
-                "WHERE id=?";
+        String updateQuery = "UPDATE Film SET name=?, description=?, release_date=?, duration=?, mpa_id=? WHERE id=?";
         int filmId = film.getId();
-        int updateResult = jdbcTemplate.update(query,
+
+        List<Object[]> batchArgs = new ArrayList<>();
+        batchArgs.add(new Object[]{
                 film.getName(),
                 film.getDescription(),
-                java.sql.Date.valueOf(film.getReleaseDate()), // Преобразование LocalDate в java.sql.Date
+                java.sql.Date.valueOf(film.getReleaseDate()),
                 film.getDuration(),
                 film.getMpa().getId(),
-                filmId);
-        if (updateResult > 0) {
+                filmId
+        });
+
+        int[] updateResults = jdbcTemplate.batchUpdate(updateQuery, batchArgs);
+
+        if (updateResults[0] > 0) {
             log.info("Film with ID {} has been updated.", filmId);
         } else {
             throw new EntityNotFoundException("Film not found for update by ID=" + filmId);
@@ -121,9 +124,11 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate.update(deleteGenreQuery, filmId);
 
         String insertGenreQuery = "INSERT INTO Genre_Film (film_id, genre_id) VALUES (?, ?)";
+        List<Object[]> genreBatchArgs = new ArrayList<>();
         for (Genre genre : film.getGenres()) {
-            jdbcTemplate.update(insertGenreQuery, filmId, genre.getId());
+            genreBatchArgs.add(new Object[]{filmId, genre.getId()});
         }
+        jdbcTemplate.batchUpdate(insertGenreQuery, genreBatchArgs);
 
         return film;
     }
