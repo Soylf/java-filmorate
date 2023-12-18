@@ -27,8 +27,6 @@ import java.util.*;
 public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    private final MpaStorage mpaStorage;
-    private final GenreStorage genreStorage;
 
 
 
