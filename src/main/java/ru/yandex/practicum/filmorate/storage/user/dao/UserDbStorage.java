@@ -1,5 +1,4 @@
 package ru.yandex.practicum.filmorate.storage.user.dao;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,11 +11,13 @@ import ru.yandex.practicum.filmorate.errorException.exception.EntityNotFoundExce
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -58,9 +59,7 @@ public class UserDbStorage implements UserStorage {
     public User addUser(User user) {
         checkUser(user);
 
-        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("User_Filmorate")
-                .usingGeneratedKeyColumns("user_id");
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("User_Filmorate").usingGeneratedKeyColumns("user_id");
         Number key = simpleJdbcInsert.executeAndReturnKey(userToMap(user));
         user.setId((Integer) key);
         log.debug("User with ID {} saved.", user.getId());
@@ -80,12 +79,7 @@ public class UserDbStorage implements UserStorage {
 
         String query = "UPDATE User_Filmorate SET email=?, login=?, user_name=?, birthday=? WHERE user_id=?";
         int userId = user.getId();
-        int updateResult = jdbcTemplate.update(query,
-                user.getEmail(),
-                user.getLogin(),
-                user.getName(),
-                user.getBirthday(),
-                userId);
+        int updateResult = jdbcTemplate.update(query, user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), userId);
         if (updateResult > 0) {
             log.debug("User with ID {} has been updated.", userId);
         } else {
@@ -107,10 +101,7 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getFriendsByUserId(Integer id) {
-        String query = "SELECT uf.user_id, uf.email, uf.login, uf.user_name, uf.birthday " +
-                "FROM User_Filmorate uf " +
-                "JOIN Friendship f ON uf.user_id = f.friend_id " +
-                "WHERE f.user_id = ?";
+        String query = "SELECT uf.user_id, uf.email, uf.login, uf.user_name, uf.birthday " + "FROM User_Filmorate uf " + "JOIN Friendship f ON uf.user_id = f.friend_id " + "WHERE f.user_id = ?";
         log.debug("All friends of user by ID {} returned from DB", id);
         return jdbcTemplate.query(query, this::mapToUser, id);
     }
@@ -131,11 +122,7 @@ public class UserDbStorage implements UserStorage {
         if (userId <= 0 || idFriend <= 0) {
             throw new EntityNotFoundException("Users with same id not exists");
         }
-        String query = "INSERT INTO Friendship (user_id, friend_id) " +
-                "SELECT ?, ? " +
-                "WHERE NOT EXISTS ( " +
-                "SELECT 1 FROM Friendship " +
-                "WHERE user_id = ? AND friend_id = ?)";
+        String query = "INSERT INTO Friendship (user_id, friend_id) " + "SELECT ?, ? " + "WHERE NOT EXISTS ( " + "SELECT 1 FROM Friendship " + "WHERE user_id = ? AND friend_id = ?)";
         int insertResult = jdbcTemplate.update(query, userId, idFriend, userId, idFriend);
         if (insertResult > 0) {
             log.info("User with ID {} has been added in friends of user by ID {}.", idFriend, userId);
@@ -145,10 +132,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public List<User> mutualFriends(Integer sourceId, Integer otherId) {
         List<User> commonFriends = new ArrayList<>();
-        String query = "SELECT u.user_id, u.email, u.login, u.user_name, u.birthday FROM Friendship f1 " +
-                "INNER JOIN Friendship f2 ON f1.friend_id = f2.friend_id " +
-                "INNER JOIN User_Filmorate u ON f1.friend_id = u.user_id " +
-                "WHERE f1.user_id = ? AND f2.user_id = ? AND f1.friend_id = f2.friend_id";
+        String query = "SELECT u.user_id, u.email, u.login, u.user_name, u.birthday FROM Friendship f1 " + "INNER JOIN Friendship f2 ON f1.friend_id = f2.friend_id " + "INNER JOIN User_Filmorate u ON f1.friend_id = u.user_id " + "WHERE f1.user_id = ? AND f2.user_id = ? AND f1.friend_id = f2.friend_id";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, sourceId, otherId);
         while (sqlRowSet.next()) {
             int friendId = sqlRowSet.getInt("user_id");
