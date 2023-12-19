@@ -1,71 +1,69 @@
 package ru.yandex.practicum.filmorate.storage.user.service;
 
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.ui.exception.EntityNotFoundException;
+import ru.yandex.practicum.filmorate.errorException.ValidationException;
+import ru.yandex.practicum.filmorate.errorException.exception.EntityNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-@Slf4j
+
 @Service
 public class UserService {
-    private final UserStorage userStorage;
+    protected final UserStorage userStorage;
 
-    @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
 
-    public User addFriend(Integer id, Integer friendId) {
-        User sourceUser = userStorage.getUserId(id);
-        User targetUser = userStorage.getUserId(friendId);
-
-        sourceUser.addFriend(friendId);
-        targetUser.addFriend(id);
-        log.info("Пользователь в друзьях");
-        return userStorage.getUserId(id);
+    public List<User> getAllUsers() {
+        return userStorage.getAllUsers();
     }
 
-    public boolean deleteFriend(Integer id, Integer friendId) {
-        User sourceUser = userStorage.getUserId(id);
-        User targetUser = userStorage.getUserId(friendId);
+    public User addUser(User user) {
+        return userStorage.addUser(user);
+    }
 
-        sourceUser.deleteFriend(targetUser.getId());
-        targetUser.deleteFriend(sourceUser.getId());
-        log.info("Пользователь удален из друзей");
+    public User getUserById(Integer id) {
+        try {
+            return userStorage.getUserById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("User with id " + id + " does not exist.");
+        }
+    }
+
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
+    }
+
+    public boolean deleteUserById(int id) {
+        userStorage.deleteUserById(id);
         return true;
     }
 
-    public List<User> mutualFriends(Integer sourceId, Integer otherId) {
-        User sourceUser = userStorage.getUserId(sourceId);
-        User targetUser = userStorage.getUserId(otherId);
-
-        if (sourceUser.getFriends().isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<Integer> userId = sourceUser.getFriends().stream().filter(identity -> targetUser.getFriends().contains(identity)).collect(Collectors.toList());
-
-        return userStorage.getAllUsers().stream().filter(user -> userId.contains(user.getId())).collect(Collectors.toList());
-
+    public boolean addFriend(int userId, int idFriend) {
+        userStorage.addFriend(userId, idFriend);
+        return true;
     }
 
-    public List<User> getFriends(Integer userId) {
-        User user = userStorage.getUserId(userId);
+    public boolean deleteFriendById(int userId, int idFriend) {
+        userStorage.deleteFriendById(userId, idFriend);
+        return true;
+    }
 
-        if (user.getFriends() == null) {
-            throw new EntityNotFoundException("Друзей нет >:3");
-        }
-        Set<Integer> friendId = user.getFriends();
-        List<User> users = new ArrayList<>();
-        friendId.forEach(numbs -> users.add(userStorage.getUserId(numbs)));
+    public Set<Integer> getFriendsByIdUser(int id) {
+        return userStorage.getFriendsByUserId(id);
+    }
 
-        return users;
+    public List<User> mutualFriends(int userId, int idFriend) {
+        return new ArrayList<>(userStorage.mutualFriends(userId, idFriend));
     }
 }
