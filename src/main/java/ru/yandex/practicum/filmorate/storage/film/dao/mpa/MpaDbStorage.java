@@ -14,14 +14,11 @@ import java.util.Optional;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
-public class MpaDbStorage implements MpaStorage{
+public class MpaDbStorage implements MpaStorage {
     private final JdbcTemplate jdbcTemplate;
 
     private Mpa mapToMpa(ResultSet rs, int rowNum) throws SQLException {
-        return Mpa.builder()
-                .id(rs.getInt("mpa_id"))
-                .name(rs.getString("name"))
-                .build();
+        return Mpa.builder().id(rs.getInt("mpa_id")).name(rs.getString("name")).build();
     }
 
     @Override
