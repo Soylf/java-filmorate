@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.film.dao.like;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
@@ -13,13 +12,12 @@ import java.util.Set;
 
 @Repository
 @Slf4j
-@RequiredArgsConstructor
-@Qualifier("LikeDbStorage")
+@AllArgsConstructor
 public class LikeDbStorage implements  LikeStorage {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public void addLike(int idFilm, int idUser) {
+    public void addLike(Integer idFilm, Integer idUser) {
         String query = "INSERT INTO Like_Film (film_id, user_id) " +
                 "SELECT ?, ? " +
                 "WHERE NOT EXISTS (" +
@@ -32,7 +30,7 @@ public class LikeDbStorage implements  LikeStorage {
     }
 
     @Override
-    public void removeLike(int idFilm, int idUser) {
+    public void removeLike(Integer idFilm, Integer idUser) {
         if (idUser < 1) {
             throw new EntityNotFoundException("User not exists by ID=" + idUser);
         }
@@ -44,7 +42,7 @@ public class LikeDbStorage implements  LikeStorage {
     }
 
     @Override
-    public Set<Integer> getFilmLikesById(int idFilm) {
+    public Set<Integer> getFilmLikesById(Integer idFilm) {
         String query = "SELECT user_id FROM Like_Film WHERE film_id=?";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, idFilm);
         Set<Integer> likedUsers = new HashSet<>();

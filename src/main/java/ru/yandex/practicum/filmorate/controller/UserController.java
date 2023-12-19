@@ -57,13 +57,13 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public boolean deleteFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "id") Integer friendId) {
+    public boolean deleteFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "friendId") Integer friendId) {
         log.info("запущен_deleteFriend");
         return userService.deleteFriendById(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
-    public Set<Integer> listFriends(@PathVariable(value = "id") Integer userId) {
+    public List<User> listFriends(@PathVariable(value = "id") Integer userId) {
         log.info("запущен_ListFriend");
         return userService.getFriendsByIdUser(userId);
     }

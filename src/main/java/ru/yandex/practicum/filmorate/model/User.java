@@ -7,17 +7,10 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-
+@AllArgsConstructor
 public class User extends AbstractModel {
 
     private String email;
     private String login;
     private LocalDate birthday;
-
-    public User(Integer id, String email, String login, String name, LocalDate birthday) {
-        super(id, name);
-        this.email = email;
-        this.login = login;
-        this.birthday = birthday;
-    }
 }

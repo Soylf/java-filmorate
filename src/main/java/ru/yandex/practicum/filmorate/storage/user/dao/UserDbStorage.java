@@ -19,39 +19,29 @@ import java.time.LocalDate;
 import java.util.*;
 
 
-@Repository
-@Qualifier("userDbStorage")
-@AllArgsConstructor
 @Slf4j
+@Repository
+@AllArgsConstructor
+@Qualifier("userDbStorage")
 public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
 
     private User mapToUser(ResultSet rs, int rowNum) throws SQLException {
-        int userId = rs.getInt("id");
-        String email = rs.getString("email");
-        String login = rs.getString("login");
-        String name = rs.getString("name");
-        LocalDate birthday = rs.getDate("birthday").toLocalDate();
-
         User user = new User();
-        user.setId(userId);
-        user.setEmail(email);
-        user.setLogin(login);
-        user.setName(name);
-        user.setBirthday(birthday);
-
-        // Set the id and name fields from the superclass
-        user.setId(userId);
-        user.setName(name);
-
+        user.setId(rs.getInt("user_id"));
+        user.setEmail(rs.getString("email"));
+        user.setLogin(rs.getString("login"));
+        user.setName(rs.getString("user_name"));
+        user.setBirthday(rs.getDate("birthday").toLocalDate());
         return user;
     }
+
 
     private Map<String, Object> userToMap(User user) {
         Map<String, Object> userAttributes = new HashMap<>();
         userAttributes.put("email", user.getEmail());
         userAttributes.put("login", user.getLogin());
-        userAttributes.put("name", user.getName());
+        userAttributes.put("user_name", user.getName());
         userAttributes.put("birthday", user.getBirthday());
         return userAttributes;
     }
@@ -59,8 +49,8 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getAllUsers() {
-        String query = "SELECT * FROM User_Filmorate";
-        log.info("All users returned from DB");
+        String query = "SELECT user_id, email, login, user_name, birthday FROM User_Filmorate";
+        log.debug("All users returned from DB");
         return jdbcTemplate.query(query, this::mapToUser);
     }
 
@@ -70,16 +60,16 @@ public class UserDbStorage implements UserStorage {
 
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("User_Filmorate")
-                .usingGeneratedKeyColumns("id");
+                .usingGeneratedKeyColumns("user_id");
         Number key = simpleJdbcInsert.executeAndReturnKey(userToMap(user));
         user.setId((Integer) key);
-        log.info("User with ID {} saved.", user.getId());
+        log.debug("User with ID {} saved.", user.getId());
         return user;
     }
 
     @Override
     public User getUserById(Integer id) {
-        String query = "SELECT id, email, login, name, birthday FROM User_Filmorate WHERE id=?";
+        String query = "SELECT user_id, email, login, user_name, birthday FROM User_Filmorate WHERE user_id=?";
         log.info("users returned from DB");
         return jdbcTemplate.queryForObject(query, this::mapToUser, id);
     }
@@ -88,7 +78,7 @@ public class UserDbStorage implements UserStorage {
     public User updateUser(User user) {
         checkUser(user);
 
-        String query = "UPDATE User_Filmorate SET email=?, login=?, name=?, birthday=? WHERE id=?";
+        String query = "UPDATE User_Filmorate SET email=?, login=?, user_name=?, birthday=? WHERE user_id=?";
         int userId = user.getId();
         int updateResult = jdbcTemplate.update(query,
                 user.getEmail(),
@@ -97,7 +87,7 @@ public class UserDbStorage implements UserStorage {
                 user.getBirthday(),
                 userId);
         if (updateResult > 0) {
-            log.info("User with ID {} has been updated.", userId);
+            log.debug("User with ID {} has been updated.", userId);
         } else {
             throw new EntityNotFoundException("User not founded for update by ID=" + userId);
         }
@@ -105,31 +95,34 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public void deleteUserById(Integer id) {
-        String query = "DELETE FROM User_Filmorate WHERE id=?";
-        int deleteResult = jdbcTemplate.update(query, id);
+    public void deleteUserById(Integer user_id) {
+        String query = "DELETE FROM User_Filmorate WHERE user_id=?";
+        int deleteResult = jdbcTemplate.update(query, user_id);
         if (deleteResult > 0) {
-            log.info("User with ID {} has been removed.", id);
+            log.info("User with ID {} has been removed.", user_id);
         } else {
-            log.info("User with ID {} has not been deleted.", id);
+            throw new EntityNotFoundException("User not found for deletion by ID=" + user_id);
         }
     }
 
     @Override
-    public Set<Integer> getFriendsByUserId(Integer id) {
-        String query = "SELECT friend_id FROM Friendship WHERE user_id = ?";
-        List<Integer> friendIds = jdbcTemplate.queryForList(query, Integer.class, id);
-        return new HashSet<>(friendIds);
+    public List<User> getFriendsByUserId(Integer id) {
+        String query = "SELECT uf.user_id, uf.email, uf.login, uf.user_name, uf.birthday " +
+                "FROM User_Filmorate uf " +
+                "JOIN Friendship f ON uf.user_id = f.friend_id " +
+                "WHERE f.user_id = ?";
+        log.debug("All friends of user by ID {} returned from DB", id);
+        return jdbcTemplate.query(query, this::mapToUser, id);
     }
 
     @Override
-    public void deleteFriendById(Integer userId, Integer idFriend) {
-        String query = "DELETE FROM Friendship WHERE user_id=? AND friend_id=?";
-        int deleteResult = jdbcTemplate.update(query, userId, idFriend);
+    public void deleteFriendById(Integer userId, Integer friendId) {
+        String query = "DELETE FROM Friendship WHERE user_id = ? AND friend_id = ?";
+        int deleteResult = jdbcTemplate.update(query, userId, friendId);
         if (deleteResult > 0) {
-            log.info("User with ID {} has been removed from friends of user by ID {}.", userId, idFriend);
+            log.info("User with ID {} has been removed from friends of user by ID {}.", userId, friendId);
         } else {
-            log.info("Users are not friends");
+            throw new EntityNotFoundException("Users are not friends");
         }
     }
 
@@ -152,13 +145,13 @@ public class UserDbStorage implements UserStorage {
     @Override
     public List<User> mutualFriends(Integer sourceId, Integer otherId) {
         List<User> commonFriends = new ArrayList<>();
-        String query = "SELECT u.id, u.email, u.login, u.name, u.birthday FROM Friendship f1 " +
+        String query = "SELECT u.user_id, u.email, u.login, u.user_name, u.birthday FROM Friendship f1 " +
                 "INNER JOIN Friendship f2 ON f1.friend_id = f2.friend_id " +
-                "INNER JOIN User_Filmorate u ON f1.friend_id = u.id " +
+                "INNER JOIN User_Filmorate u ON f1.friend_id = u.user_id " +
                 "WHERE f1.user_id = ? AND f2.user_id = ? AND f1.friend_id = f2.friend_id";
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet(query, sourceId, otherId);
         while (sqlRowSet.next()) {
-            int friendId = sqlRowSet.getInt("friend_id");
+            int friendId = sqlRowSet.getInt("user_id");
             commonFriends.add(getUserById(friendId));
         }
         return commonFriends;
@@ -171,7 +164,7 @@ public class UserDbStorage implements UserStorage {
         if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
             throw new ValidationException("Некорректный логин");
         }
-        if (user.getName() == null) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         if (user.getBirthday() != null && user.getBirthday().isAfter(LocalDate.now())) {

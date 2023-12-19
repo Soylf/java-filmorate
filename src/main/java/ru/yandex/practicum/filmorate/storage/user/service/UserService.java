@@ -44,26 +44,26 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public boolean deleteUserById(int id) {
+    public boolean deleteUserById(Integer id) {
         userStorage.deleteUserById(id);
         return true;
     }
 
-    public boolean addFriend(int userId, int idFriend) {
+    public boolean addFriend(Integer userId, Integer idFriend) {
         userStorage.addFriend(userId, idFriend);
         return true;
     }
 
-    public boolean deleteFriendById(int userId, int idFriend) {
+    public boolean deleteFriendById(Integer userId, Integer idFriend) {
         userStorage.deleteFriendById(userId, idFriend);
         return true;
     }
 
-    public Set<Integer> getFriendsByIdUser(int id) {
+    public List<User> getFriendsByIdUser(Integer id) {
         return userStorage.getFriendsByUserId(id);
     }
 
-    public List<User> mutualFriends(int userId, int idFriend) {
+    public List<User> mutualFriends(Integer userId, Integer idFriend) {
         return new ArrayList<>(userStorage.mutualFriends(userId, idFriend));
     }
 }
