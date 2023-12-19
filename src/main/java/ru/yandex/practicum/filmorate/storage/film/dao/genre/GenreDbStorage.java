@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
-public class GenreDbStorage implements GenreStorage{
+public class GenreDbStorage implements GenreStorage {
     private final JdbcTemplate jdbcTemplate;
 
     private Genre mapRowToGenre(ResultSet resultSet, int i) throws SQLException {
