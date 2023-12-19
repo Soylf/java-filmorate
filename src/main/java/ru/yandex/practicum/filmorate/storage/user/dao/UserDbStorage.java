@@ -89,13 +89,13 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public void deleteUserById(Integer user_id) {
+    public void deleteUserById(Integer userId) {
         String query = "DELETE FROM User_Filmorate WHERE user_id=?";
-        int deleteResult = jdbcTemplate.update(query, user_id);
+        int deleteResult = jdbcTemplate.update(query, userId);
         if (deleteResult > 0) {
-            log.info("User with ID {} has been removed.", user_id);
+            log.info("User with ID {} has been removed.", userId);
         } else {
-            throw new EntityNotFoundException("User not found for deletion by ID=" + user_id);
+            throw new EntityNotFoundException("User not found for deletion by ID=" + userId);
         }
     }
 
