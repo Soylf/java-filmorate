@@ -15,6 +15,7 @@ import ru.yandex.practicum.filmorate.model.impl.Genre;
 import ru.yandex.practicum.filmorate.model.impl.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.film.dao.genre.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.film.dao.like.LikeStorage;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class FilmDbStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
     private final GenreStorage genreStorage;
+    private final LikeStorage likeStorage;
 
     private Map<String, Object> filmToMap(Film film) {
         Map<String, Object> values = new HashMap<>();
@@ -50,6 +52,7 @@ public class FilmDbStorage implements FilmStorage {
             film.setDescription(rs.getString("description"));
             film.setReleaseDate(rs.getDate("release_date").toLocalDate());
             film.setDuration(rs.getInt("duration"));
+            film.setRate(likeStorage.getFilmLikesById(film.getId()).size());
 
             Mpa mpa = new Mpa(rs.getInt("mpa_id"), rs.getString("name"));
             film.setMpa(mpa);
