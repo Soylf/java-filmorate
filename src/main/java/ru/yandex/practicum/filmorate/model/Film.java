@@ -1,28 +1,31 @@
 package ru.yandex.practicum.filmorate.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.yandex.practicum.filmorate.model.impl.Genre;
+import ru.yandex.practicum.filmorate.model.impl.Mpa;
+
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Film extends AbstractModel {
+
 
     private String description;
     private LocalDate releaseDate;
     private Integer duration;
-    @JsonIgnore
-    private Set<Integer> like = new HashSet<>();
+    private Integer rate;
+    private List<Genre> genres = new ArrayList<>();
 
-    public Film(Integer id, String name, String description, LocalDate releaseDate, Integer duration) {
-        super(id, name);
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-    }
+    private Mpa mpa;
+
+
 }

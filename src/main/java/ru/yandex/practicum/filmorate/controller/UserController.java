@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.model.User;
 import org.springframework.web.bind.annotation.*;
 
 
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import ru.yandex.practicum.filmorate.storage.user.service.UserService;
 
 import java.util.*;
@@ -14,59 +13,59 @@ import java.util.*;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    private final UserStorage userStorage;
+
 
     @PostMapping
     public User addUser(@RequestBody User user) {
         log.info("addUser_запушен");
-        return userStorage.addUser(user);
+        return userService.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
         log.info("updateUser_запушен");
-        return userStorage.updateUser(user);
+        return userService.updateUser(user);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
         log.info("getAalUsers_запушен");
-        return userStorage.getAllUsers();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable(value = "id") Integer id) {
         log.info("getUser_запушен");
-        return userStorage.getUserId(id);
+        return userService.getUserById(id);
     }
 
     @DeleteMapping
-    public User deleteUser(User user) {
+    public boolean deleteUser(User user) {
         log.info("deleteUser_запушен");
-        return userStorage.deleteUser(user.getId());
+        return userService.deleteUserById(user.getId());
     }
 
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "friendId") Integer userId) {
+    public boolean addFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "friendId") Integer userId) {
         log.info("запущен_addFriend");
         return userService.addFriend(id, userId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public boolean deleteFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "id") Integer friendId) {
+    public boolean deleteFriend(@PathVariable(value = "id") Integer id, @PathVariable(value = "friendId") Integer friendId) {
         log.info("запущен_deleteFriend");
-        return userService.deleteFriend(id, friendId);
+        return userService.deleteFriendById(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
     public List<User> listFriends(@PathVariable(value = "id") Integer userId) {
         log.info("запущен_ListFriend");
-        return userService.getFriends(userId);
+        return userService.getFriendsByIdUser(userId);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
